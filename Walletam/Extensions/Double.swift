@@ -9,6 +9,16 @@ import Foundation
 
 extension Double {
     
+    private var  creaditCardFormatter: NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.usesGroupingSeparator = true
+        formatter.groupingSize = 4
+        formatter.groupingSeparator = "    "
+        formatter.locale = Locale(identifier: "fa_IR")
+        //formatter.currencyCode = "usd
+        return formatter
+    }
+    
     //converts double to currency with 2 decimal places
     private var  currencyFormatter2: NumberFormatter {
         let formatter = NumberFormatter()
@@ -126,6 +136,11 @@ extension Double {
     
     func asPercentString() -> String {
         return asNumberString() + "%"
+    }
+    
+    func asCreaditCardString() -> String {
+        let number = NSNumber(value: self)
+        return creaditCardFormatter.string(from: number) ?? ""
     }
     
     /// Convert a Double to a String with K, M, Bn, Tr abbreviations.

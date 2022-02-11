@@ -18,7 +18,11 @@ struct IRTransactionView: View {
     
     var body: some View {
         ZStack {
+            
+            
+            
         List {
+            
             Section {
                 ForEach(vm.portfolioDataService.irEntities) {item in
                     HStack{
@@ -76,6 +80,33 @@ struct IRTransactionView: View {
                 
             }
             
+        header: {
+            ScrollView(.horizontal, showsIndicators: false){
+                
+                HStack {
+                    ForEach(vm.portfolioDataService.bankEntities) {item in
+                            HStack {
+                                VStack {
+                                    HStack {
+                                        Spacer()
+                                        Text("\(item.name ?? "")")
+                                            .font(Font.custom("BYekan+", size: 26))
+                                    }.padding()
+                                    Spacer()
+                                    Text("\(item.code.asCreaditCardString())")
+                                        .font(Font.custom("BYekan+", size: 24))
+                                        .lineLimit(1)
+                                    Spacer()
+                                }.frame(width: 280 , height: 160)
+                                
+                            
+
+                            }.padding().background(RoundedRectangle.init(cornerRadius: 15).opacity(0.5).padding())
+                    }
+                }
+            }
+        }
+            
         }
         .environment(\.locale, Locale.init(identifier: "de"))
         }
@@ -86,14 +117,13 @@ struct IRTransactionView: View {
                 
                 List {
                         Section {
-                            
                         
         //                Divider()
                         HStack {
                             HStack(spacing: 5) {
                                 Text("تومان")
                                     .font(Font.custom("BYekan+", size: 14))
-                                Text("\(selectedTran?.amount.asTomanWith2Decimals() ?? "")").font(Font.custom("BYekan+", size: 14))
+                                Text("\(selectedTran?.amount.asTomanWith2Decimals() ?? "-")").font(Font.custom("BYekan+", size: 14))
                             }
                             
                             Spacer()
@@ -115,7 +145,7 @@ struct IRTransactionView: View {
                             Text("ساعت:").font(Font.custom("BYekan+", size: 16))
                         }.padding(.horizontal)
         //                Divider()
-                        VStack {
+                            VStack(alignment: .trailing) {
                             HStack{
                                 Spacer()
                                 Text("یادداشت:").font(Font.custom("BYekan+", size: 16))

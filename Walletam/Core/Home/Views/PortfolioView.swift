@@ -28,6 +28,8 @@ struct PortfolioView: View {
     @FocusState private var priceIsFocused: Bool
     @FocusState private var searchIsFocused: Bool
     
+    @State private var showBankView:Bool = false
+    
     private let portfolioDataService = PortfolioDataService()
     
     var body: some View {
@@ -261,6 +263,37 @@ extension PortfolioView {
             baseInputDetails
             
             VStack(alignment: .trailing) {
+                HStack {
+                    
+                    ForEach(vm.portfolioDataService.bankEntities) {item in
+                            HStack {
+                                VStack {
+                                    HStack {
+                                        Spacer()
+                                        Text("\(item.name ?? "")")
+                                            .font(Font.custom("BYekan+", size: 26))
+                                    }.padding()
+                                    Spacer()
+                                }.frame(width: 20 , height: 20)
+                                
+                            
+
+                            }.padding().background(RoundedRectangle.init(cornerRadius: 15).opacity(0.5).padding())
+                    }
+                    
+                    Spacer()
+                    Text("حساب:")
+                        .font(Font.custom("BYekan+", size: 16))
+                        .onTapGesture {
+                            showBankView.toggle()
+                        }
+                    //                            .frame(height: 150)
+                    
+                }
+                .sheet(isPresented: $showBankView, content: {
+                   BankView()
+                        })
+                
                 HStack {
                     TextField("", text: $noteText)
                         .focused($noteIsFocused)

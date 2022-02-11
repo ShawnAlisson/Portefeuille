@@ -186,7 +186,6 @@ class HomeViewModel: ObservableObject {
         return irPrice = newValue
     }
     
-
     
     
      func mapGlobalMarketData(marketDataModel: MarketDataModel?, portfolioCoins: [CoinModel]) -> [StatisticModel] {
@@ -242,15 +241,38 @@ class HomeViewModel: ObservableObject {
         
         
         stats.append(contentsOf: [
-            marketCap,
-            volume,
-            btcDom,
-            tethStatsPrice,
             irPortfolio,
             portfolio,
+            tethStatsPrice,
+            btcDom,
+            volume,
+            marketCap,
         ])
         return stats
+    }
     
+    func tethPriceAsDouble() -> Double {
+        let newPrice = ((tethPrice ?? "") as NSString).doubleValue
+        return newPrice
+    }
+    
+    func cryptoTotalCalc() -> Double {
+        let portfolioCryptoValue =
+            portfolioCoins
+                .map({ $0.currentHoldingsValue })
+        //sum of all [double] to double
+                .reduce(0, +)
+        return portfolioCryptoValue
+    }
+    
+    func cryptoTotalAsToman() -> Double {
+        let newPrice = cryptoTotalCalc() * tethPriceAsDouble() / 10
+        return newPrice
+    }
+    
+    func tomanTotalAsDollar() -> Double {
+        let newPrice = (irPrice ?? 0) / tethPriceAsDouble() * 10
+        return newPrice
     }
     
     func totalPortfolioCalc() -> Double {
@@ -266,8 +288,7 @@ class HomeViewModel: ObservableObject {
     }
     
     func totalPortfolioToman() -> Double {
-        let newTethPrice = ((tethPrice ?? "") as NSString).doubleValue
-        let value = totalPortfolioCalc() * newTethPrice / 10
+        let value = totalPortfolioCalc() * tethPriceAsDouble() / 10
         return value
     }
     }

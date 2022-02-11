@@ -109,34 +109,70 @@ extension HomeStatsView {
                             HStack{
                                 Image(systemName: "dollarsign.circle.fill").resizable().frame(width: 40, height: 40)
                                 Text("\(vm.totalPortfolioCalc().asTomanWith2Decimals())")
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.1)
                                     .font(Font.custom("BYekan+", size: 50))
                                 
                             }
                             HStack{
                                 Text("تومان")
-                                    .font(Font.custom("BYekan+", size: 25)).foregroundColor(Color.theme.SecondaryText)
+                                    .font(Font.custom("BYekan+", size: 15)).foregroundColor(Color.theme.SecondaryText)
                                 
                                 Text("\(vm.totalPortfolioToman().asTomanWith2Decimals())")
-                                    .font(Font.custom("BYekan+", size: 25)).foregroundColor(Color.theme.SecondaryText)
+                                    .font(Font.custom("BYekan+", size: 15)).foregroundColor(Color.theme.SecondaryText)
                             }
                                 .environment(\.locale, Locale.init(identifier: "fa_IR"))
                         }
                         Spacer()
                         
                         VStack(alignment: .trailing, spacing: 10) {
-                            HStack {
-                                Text("")
+                            HStack(spacing: 2) {
+                                if vm.showCurrencyChange {
+                                    Text("تومان")
+                                        .font(Font.custom("BYekan+", size: 15)).foregroundColor(Color.theme.SecondaryText)
+                                    Text("\(vm.cryptoTotalAsToman().asTomanWith2Decimals())")
+                                        .lineLimit(1)
+                                        .minimumScaleFactor(0.1)
+                                        .font(Font.custom("BYekan+", size: 15)).foregroundColor(Color.theme.SecondaryText)
+                                        
+                                } else {
+                                    Text("\(vm.cryptoTotalCalc().asCurrencyWith2Decimals())")
+                                        .lineLimit(1)
+                                        .minimumScaleFactor(0.1)
+                                        .font(Font.custom("BYekan+", size: 15)).foregroundColor(Color.theme.SecondaryText)
+                                        
+                                }
+                                
                                 Image(systemName: "bitcoinsign.circle.fill")
                                 
                             }
                             HStack {
-                                Text("")
+                                
+                                if vm.showCurrencyChange {
+                                    HStack(spacing: 2) {
+                                        Text("تومان")
+                                            .font(Font.custom("BYekan+", size: 15)).foregroundColor(Color.theme.SecondaryText)
+                                        Text("\(vm.irPrice?.asTomanWith2Decimals() ?? "")")
+                                            .lineLimit(1)
+                                            .minimumScaleFactor(0.1)
+                                            .font(Font.custom("BYekan+", size: 15)).foregroundColor(Color.theme.SecondaryText)
+                                            
+                                        
+                                    }
+                                } else {
+                                    Text("\(vm.tomanTotalAsDollar().asCurrencyWith2Decimals())")
+                                        .lineLimit(1)
+                                        .minimumScaleFactor(0.1)
+                                        .font(Font.custom("BYekan+", size: 15)).foregroundColor(Color.theme.SecondaryText)
+                                        
+                                }
+                                
                                 Image(systemName: "creditcard.fill")
                             }
-                            HStack {
-                                Text("")
-                                Image(systemName: "circlebadge.2.fill")
-                            }
+//                            HStack {
+//                                Text("")
+//                                Image(systemName: "circlebadge.2.fill")
+//                            }
                         }
                     }
                 }

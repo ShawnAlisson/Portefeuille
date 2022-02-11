@@ -232,7 +232,6 @@ extension HomeView {
                                 Text("12 %")
                             }
                         }
-                        
                     }
                     .redacted(reason: .placeholder)
                         .opacity(animationAmount)

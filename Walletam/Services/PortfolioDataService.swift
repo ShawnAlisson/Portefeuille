@@ -22,6 +22,7 @@ class PortfolioDataService {
     @Published var savedEntities: [PortEntity] = []
 //    @Published var transactionEntities: [TransEntity] = []
     @Published var irEntities: [IREntity] = []
+    @Published var bankEntities: [BankEntity] = []
 
     init() {
         container = NSPersistentContainer(name: containerName)
@@ -64,13 +65,20 @@ class PortfolioDataService {
             print("⚠️Error fetching Portfolio Entities. \(error.localizedDescription)")
         }
         
+        let bankRequest = NSFetchRequest<BankEntity>(entityName: "BankEntity")
+        do {
+            bankEntities = try container.viewContext.fetch(bankRequest)
+        } catch let error {
+            print("⚠️Error fetching Bank Entities. \(error.localizedDescription)")
+        }
+        
         let IRRequest = NSFetchRequest<IREntity>(entityName: "IREntity")
         let sort = NSSortDescriptor(key: "date", ascending: false)
         IRRequest.sortDescriptors = [sort]
         do {
             irEntities = try container.viewContext.fetch(IRRequest)
         } catch let error {
-            print("⚠️Error fetching Portfolio Entities. \(error.localizedDescription)")
+            print("⚠️Error fetching Toman Entities. \(error.localizedDescription)")
         }
         
     }
@@ -80,6 +88,15 @@ class PortfolioDataService {
         
         entity.amount = amount
         entity.date = date
+        entity.note = note
+        applyChanges()
+    }
+    
+    func addBank(name: String, code: Double, note: String) {
+        let entity = BankEntity(context: container.viewContext)
+        
+        entity.name = name
+        entity.code = code
         entity.note = note
         applyChanges()
     }

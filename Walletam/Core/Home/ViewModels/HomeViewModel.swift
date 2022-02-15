@@ -30,6 +30,8 @@ class HomeViewModel: ObservableObject {
     @Published var sortOptions: SortOption = .holding
     
     @AppStorage("currencyChange") var showCurrencyChange: Bool = false
+    @AppStorage("authState") var authState: Bool = false
+    
     
     @Published var tethPrice: String? = nil
     @Published var searchField: String = ""

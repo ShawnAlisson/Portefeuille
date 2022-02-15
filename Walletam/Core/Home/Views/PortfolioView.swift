@@ -10,6 +10,8 @@ import SwiftUI
 struct PortfolioView: View {
     
     @Environment(\.presentationMode) var presentationMode
+    
+    
     @EnvironmentObject private var vm: HomeViewModel
     @State private var selectedCoin: CoinModel? = nil
     @State private var quantityText: String = ""
@@ -20,7 +22,7 @@ struct PortfolioView: View {
     @State private var moreOptions: Bool = false
     @State private var tomanSelector: Bool = false
     @State private var cryptoSelector: Bool = false
-    @State private var sekkeSelector: Bool = false
+    @State private var goldSelector: Bool = false
     @ObservedObject var monitor = NetworkMonitor()
     
     @FocusState private var amountIsFocused: Bool
@@ -28,114 +30,122 @@ struct PortfolioView: View {
     @FocusState private var priceIsFocused: Bool
     @FocusState private var searchIsFocused: Bool
     
-    @State private var showBankView:Bool = false
+    @State private var showBankView: Bool = false
+    @State private var showBankSelectionView: Bool = false
+    @State private var showGoldTypeSelectionView: Bool = false
+    
+    
+    @State private var selectedAccount: String = "بدون دسته‌بندی"
+    @State private var selectedGoldType: String = "انتخاب کنید"
     
     private let portfolioDataService = PortfolioDataService()
     
     var body: some View {
-        
-        NavigationView {
-            ScrollView {
-                VStack {
-                    HStack {
-                        
-                        RoundedRectangle(cornerRadius: 15).stroke(cryptoSelector ? Color.theme.green : Color.theme.accent.opacity(0.2), lineWidth: 1).frame(width: 100, height: 100).overlay {
-                            VStack {
-                                Image(systemName: cryptoSelector ? "bitcoinsign.square.fill" : "bitcoinsign.square").resizable().scaledToFit().foregroundColor(Color.theme.accent).frame(width: 45, height: 45).padding()
-                                Text("رمز ارز").padding(.bottom, 15).font(Font.custom("BYekan", size: 20))
-                            }
-                            
-                        }
-                        
-                        .onTapGesture { withAnimation {
-                            cryptoSelector.toggle()
-                            tomanSelector = false
-                            sekkeSelector = false
-                            quantityText = ""
-                        }
-                            
-                        }
-                        RoundedRectangle(cornerRadius: 15).stroke(tomanSelector ? Color.theme.green : Color.theme.accent.opacity(0.2), lineWidth: 1).frame(width: 100, height: 100).overlay {
-                            
-                            VStack {
-                                Image(systemName: tomanSelector ? "creditcard.fill" : "creditcard").resizable().scaledToFit().foregroundColor(Color.theme.accent).frame(width: 45, height: 45).padding()
-                                Text("تومان").padding(.bottom, 15).font(Font.custom("BYekan", size: 20))
-                            }
-                            
-                        }
-                        .onTapGesture { withAnimation {
-                            tomanSelector.toggle()
-                            cryptoSelector = false
-                            sekkeSelector = false
-                            quantityText = ""
-                        }
-                        }
-                        
-                        RoundedRectangle(cornerRadius: 15).stroke(sekkeSelector ? Color.theme.green : Color.theme.accent.opacity(0.2), lineWidth: 1).frame(width: 100, height: 100).overlay {
-                            VStack {
-                                Image(systemName: sekkeSelector ? "circlebadge.2.fill" : "circlebadge.2").resizable().scaledToFit().foregroundColor(Color.theme.accent).frame(width: 45, height: 45).padding()
-                                Text("طلا و سکه").padding(.bottom, 15).font(Font.custom("BYekan", size: 20))
-                            }
-                            
-                        }
-                        
-                        .onTapGesture { withAnimation {
-                            sekkeSelector.toggle()
-                            tomanSelector = false
-                            cryptoSelector = false
-                            quantityText = ""
-                        }
-                        }
-                    }
-                    if cryptoSelector {
-                        cryptoSelectorView
-                    } else if tomanSelector {
-                        tomanSelectorView
-                    }
-                }
-            }
-            .toolbar(content: {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: { withAnimation{
-                        presentationMode.wrappedValue.dismiss()
-                    }
-                        HapticManager.impact(style: .soft)
-                    }, label: {
-                        Image(systemName: "xmark")
-                            .font(.headline)
-                    })
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    trailingNavBarButton
-                }
+        ZStack {
+            NavigationView {
                 
-                ToolbarItemGroup(placement: .keyboard) {
-                    Spacer()
-                    Button("بستن") {
-                        amountIsFocused = false
-                        noteIsFocused = false
-                        priceIsFocused = false
-                        searchIsFocused = false
+                ScrollView {
+                    VStack {
+                        HStack {
+                            RoundedRectangle(cornerRadius: 15).stroke(cryptoSelector ? Color.theme.green : Color.theme.accent.opacity(0.2), lineWidth: 1).frame(width: 100, height: 100).overlay {
+                                VStack {
+                                    Image(systemName: cryptoSelector ? "bitcoinsign.square.fill" : "bitcoinsign.square").resizable().scaledToFit().foregroundColor(Color.theme.accent).frame(width: 45, height: 45).padding()
+                                    Text("رمز ارز").padding(.bottom, 15).font(Font.custom("BYekan", size: 20))
+                                }
+                            }
+
+                            .onTapGesture { withAnimation {
+                                cryptoSelector.toggle()
+                                tomanSelector = false
+                                goldSelector = false
+                                quantityText = ""
+                            }
+                                
+                            }
+                            RoundedRectangle(cornerRadius: 15).stroke(tomanSelector ? Color.theme.green : Color.theme.accent.opacity(0.2), lineWidth: 1).frame(width: 100, height: 100).overlay {
+                                
+                                VStack {
+                                    Image(systemName: tomanSelector ? "creditcard.fill" : "creditcard").resizable().scaledToFit().foregroundColor(Color.theme.accent).frame(width: 45, height: 45).padding()
+                                    Text("تومان").padding(.bottom, 15).font(Font.custom("BYekan", size: 20))
+                                }
+                                
+                            }
+                            .onTapGesture { withAnimation {
+                                
+                                tomanSelector.toggle()
+                                cryptoSelector = false
+                                goldSelector = false
+                                quantityText = ""
+                            }
+                            }
+                            
+                            RoundedRectangle(cornerRadius: 15).stroke(goldSelector ? Color.theme.green : Color.theme.accent.opacity(0.2), lineWidth: 1).frame(width: 100, height: 100).overlay {
+                                VStack {
+                                    Image(systemName: goldSelector ? "circlebadge.2.fill" : "circlebadge.2").resizable().scaledToFit().foregroundColor(Color.theme.accent).frame(width: 45, height: 45).padding()
+                                    Text("طلا و سکه").padding(.bottom, 15).font(Font.custom("BYekan", size: 20))
+                                }
+                                
+                            }
+                            
+                            .onTapGesture { withAnimation {
+                                goldSelector.toggle()
+                                tomanSelector = false
+                                cryptoSelector = false
+                                quantityText = ""
+                            }
+                            }
+                        }
+                        if cryptoSelector {
+                            cryptoSelectorView
+                        } else if tomanSelector {
+                            tomanSelectorView
+                        } else if goldSelector {
+                            goldSelectorView
+                        }
                     }
-                    .font(Font.custom("BYekan", size: 18))
                 }
-            })
-            //remove new coin input section after search bar get empty
-            .onChange(of: vm.searchField) { newValue in
-                if newValue == "" {
-                    removeSelectedCoin()
+                .toolbar(content: {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(action: { withAnimation{
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                            HapticManager.impact(style: .soft)
+                        }, label: {
+                            Image(systemName: "xmark")
+                                .font(.headline)
+                        })
+                    }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        trailingNavBarButton
+                    }
+                    
+                    ToolbarItemGroup(placement: .keyboard) {
+                        Spacer()
+                        Button("بستن") {
+                            amountIsFocused = false
+                            noteIsFocused = false
+                            priceIsFocused = false
+                            searchIsFocused = false
+                        }
+                        .font(Font.custom("BYekan", size: 18))
+                    }
+                })
+                //remove new coin input section after search bar get empty
+                .onChange(of: vm.searchField) { newValue in
+                    if newValue == "" {
+                        removeSelectedCoin()
+                    }
+                    
                 }
             }
-            
-            //            .navigationBarItems(leading: Button(action: {
-            //                presentationMode.wrappedValue.dismiss()
-            //            }, label: {
-            //                Image(systemName: "xmark.circle.fill")
-            //                    .font(.headline)
-            //            }) )
         }
+        
+        .sheet(isPresented: $showBankSelectionView, content: {
+            bankSelectionView
+        })
     }
 }
+
 
 //MARK: PREVIEW
 struct PortfolioView_Previews: PreviewProvider {
@@ -143,9 +153,8 @@ struct PortfolioView_Previews: PreviewProvider {
         ZStack{
             PortfolioView()
                 .environmentObject(dev.homeVM)
-    //            .preferredColorScheme(.dark)
+                        .preferredColorScheme(.dark)
         }
-        
     }
 }
 
@@ -155,16 +164,16 @@ extension PortfolioView {
     private var cryptoSelectorView: some View {
         
         ZStack {
-
+            
             VStack(alignment: .trailing, spacing: 0) {
                 
                 HStack {
                     if !monitor.isConnected {
-                                Image(systemName: "wifi.slash")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .foregroundColor(Color.theme.red)
-                                    .frame(width: 35, height: 35)
+                        Image(systemName: "wifi.slash")
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundColor(Color.theme.red)
+                            .frame(width: 35, height: 35)
                         .padding(.horizontal, 5)}
                     
                     SearchBarView(searchField: $vm.searchField)
@@ -172,16 +181,16 @@ extension PortfolioView {
                         .onTapGesture {
                             searchIsFocused = true
                         }
-                    .padding()
+                        .padding()
                 }.padding(.horizontal)
                 
                 logoList
                 
                 if selectedCoin != nil {
+                    Spacer()
                     portfolioInputSection
                 }
             }
-            
         }
     }
     
@@ -210,8 +219,144 @@ extension PortfolioView {
         })
     }
     
+    private var goldSelectorView: some View {
+        VStack(spacing: 20){
+            stateSelector
+            goldTypeSelectionView
+            baseInputDetails
+            
+            HStack {
+                TextField("", text: $noteText)
+                    .focused($noteIsFocused)
+                    .font(Font.custom("BYekan", size: 16))
+                    .multilineTextAlignment(.trailing)
+                    .padding()
+                    .background(.ultraThinMaterial).cornerRadius(10)
+                    .onTapGesture {
+                        noteIsFocused = true
+                    }
+                    .padding()
+                
+                Spacer()
+                
+                Text("یادداشت:")
+                    .font(Font.custom("BYekan+", size: 16))
+            }
+            dateSeclectorView
+        }.padding()
+        
+    }
+    
+    private var goldTypeSelectionView: some View {
+        VStack{
+            HStack {
+                Text(selectedGoldType).font(Font.custom("BYekan+", size: 16)).lineLimit(1).minimumScaleFactor(0.1).frame(height: 30).frame(maxWidth: .infinity).padding().background(.ultraThinMaterial).cornerRadius(15).padding()
+                    .onTapGesture {
+                        showGoldTypeSelectionView.toggle()
+                    }
+                
+                Spacer()
+                
+                Text("نوع سکه یا طلا:")
+                    .font(Font.custom("BYekan+", size: 16))
+                
+            }
+            
+        }.sheet(isPresented: $showGoldTypeSelectionView, content: {
+            ZStack {
+                
+                        VStack {
+                                HStack {
+                                    Text("۸.۱۳ گرم")
+                                        .font(Font.custom("BYekan+", size: 24)).lineLimit(1).minimumScaleFactor(0.1)
+                                    Spacer()
+                                        Text("تمام سکه")
+                                            .font(Font.custom("BYekan+", size: 24)).lineLimit(1).minimumScaleFactor(0.1)
+                                        
+                                        
+                                }.padding().frame(width: UIScreen.main.bounds.width * 0.9 , height: 100 ).background(.ultraThinMaterial).cornerRadius(15).onTapGesture {
+                                    selectedGoldType = "تمام سکه"
+                                }
+                            
+                            HStack {
+                                Text("۴.۰۷ گرم")
+                                    .font(Font.custom("BYekan+", size: 24)).lineLimit(1).minimumScaleFactor(0.1)
+                                Spacer()
+                                    Text("نیم سکه")
+                                        .font(Font.custom("BYekan+", size: 24)).lineLimit(1).minimumScaleFactor(0.1)
+                                    
+                                    
+                            }.padding().frame(width: UIScreen.main.bounds.width * 0.9 , height: 100 ).background(.ultraThinMaterial).cornerRadius(15).onTapGesture {
+                                selectedGoldType = "نیم سکه"
+                            }
+                            
+                            HStack {
+                                Text("۲.۰۳ گرم")
+                                    .font(Font.custom("BYekan+", size: 24)).lineLimit(1).minimumScaleFactor(0.1)
+                                Spacer()
+                                    Text("ربع سکه")
+                                        .font(Font.custom("BYekan+", size: 24)).lineLimit(1).minimumScaleFactor(0.1)
+                                  
+                                    
+                            }.padding().frame(width: UIScreen.main.bounds.width * 0.9 , height: 100 ).background(.ultraThinMaterial).cornerRadius(15).onTapGesture {
+                                selectedGoldType = "ربع سکه"
+                            }
+                            
+                            HStack {
+                                Text("۱.۰۱ گرم")
+                                    .font(Font.custom("BYekan+", size: 24)).lineLimit(1).minimumScaleFactor(0.1)
+                                Spacer()
+                                    Text("سکه یک گرمی")
+                                        .font(Font.custom("BYekan+", size: 24)).lineLimit(1).minimumScaleFactor(0.1)
+                                    
+                                    
+                            }.padding().frame(width: UIScreen.main.bounds.width * 0.9 , height: 100 ).background(.ultraThinMaterial).cornerRadius(15).onTapGesture {
+                                selectedGoldType = "سکه یک گرمی"
+                            }
+                           
+                            HStack {
+                                Text("۱ گرم")
+                                    .font(Font.custom("BYekan+", size: 24)).lineLimit(1).minimumScaleFactor(0.1)
+                                Spacer()
+                                    Text("طلای ۱۸ عیار")
+                                        .font(Font.custom("BYekan+", size: 24)).lineLimit(1).minimumScaleFactor(0.1)
+                                    
+                                    
+                            }.padding().frame(width: UIScreen.main.bounds.width * 0.9 , height: 100 ).background(.ultraThinMaterial).cornerRadius(15).padding(30).onTapGesture {
+                                selectedGoldType = "طلای ۱۸ عیار"
+                            }
+                    }
+                    .padding()
+                    
+                
+                VStack{
+                    HStack{
+                        Spacer()
+                        RoundedRectangle(cornerRadius: 15).frame(width: 60, height: 4).foregroundColor(Color.theme.SecondaryText.opacity(0.5))
+                        Spacer()
+                    }
+                    Spacer()
+                }
+                .padding(.top, 10)
+            }
+        })
+        
+    }
+    
     private var tomanSelectorView: some View {
         tomanInputSection
+    }
+    
+    private var dateSeclectorView: some View {
+        HStack {
+            DatePicker(selection: $vm.dateAdded , label: { Text("تاریخ:")})
+                .font(Font.custom("BYekan+", size: 16))
+                .datePickerStyle(.compact)
+                .environment(\.locale, Locale.init(identifier: "fa_IR"))
+                .environment(\.calendar,Calendar(identifier: .persian))
+                .environment(\.layoutDirection, .rightToLeft)
+                .padding(.leading)
+        }
     }
     
     private var stateSelector: some View {
@@ -246,8 +391,8 @@ extension PortfolioView {
                 .background(.ultraThinMaterial).cornerRadius(10)
                 .onTapGesture {
                     amountIsFocused = true
-                            }
-//                .shadow(color: Color.theme.shadowColor.opacity(0.6), radius: 5, x: 0, y: 0)
+                }
+            //                .shadow(color: Color.theme.shadowColor.opacity(0.6), radius: 5, x: 0, y: 0)
                 .padding()
             
             Spacer()
@@ -264,37 +409,6 @@ extension PortfolioView {
             
             VStack(alignment: .trailing) {
                 HStack {
-                    
-                    ForEach(vm.portfolioDataService.bankEntities) {item in
-                            HStack {
-                                VStack {
-                                    HStack {
-                                        Spacer()
-                                        Text("\(item.name ?? "")")
-                                            .font(Font.custom("BYekan+", size: 26))
-                                    }.padding()
-                                    Spacer()
-                                }.frame(width: 20 , height: 20)
-                                
-                            
-
-                            }.padding().background(RoundedRectangle.init(cornerRadius: 15).opacity(0.5).padding())
-                    }
-                    
-                    Spacer()
-                    Text("حساب:")
-                        .font(Font.custom("BYekan+", size: 16))
-                        .onTapGesture {
-                            showBankView.toggle()
-                        }
-                    //                            .frame(height: 150)
-                    
-                }
-                .sheet(isPresented: $showBankView, content: {
-                   BankView()
-                        })
-                
-                HStack {
                     TextField("", text: $noteText)
                         .focused($noteIsFocused)
                         .font(Font.custom("BYekan", size: 16))
@@ -302,33 +416,81 @@ extension PortfolioView {
                         .padding()
                         .background(.ultraThinMaterial).cornerRadius(10)
                         .onTapGesture {
-                                        noteIsFocused = true
-                                    }
-//                        .shadow(color: Color.theme.shadowColor.opacity(0.6), radius: 5, x: 0, y: 0)
+                            noteIsFocused = true
+                        }
                         .padding()
-
-                        
                     
                     Spacer()
+                    
                     Text("یادداشت:")
                         .font(Font.custom("BYekan+", size: 16))
-                    //                            .frame(height: 150)
-                    
                 }
                 
                 HStack {
-                    DatePicker(selection: $vm.dateAdded , label: { Text("تاریخ:")})
+                    Image(systemName: "creditcard.and.123").resizable().scaledToFit().frame(width: 30, height: 30).padding().background(.ultraThinMaterial).cornerRadius(15)
+                        .onTapGesture {
+                            showBankView.toggle()
+                        }.padding()
+                    
+                    Spacer()
+                    
+                    Text(selectedAccount).font(Font.custom("BYekan+", size: 16)).lineLimit(1).minimumScaleFactor(0.1).frame(height: 30).frame(maxWidth: .infinity).padding().background(.ultraThinMaterial).cornerRadius(15).padding()
+                        .onTapGesture {
+                            showBankSelectionView.toggle()
+                        }
+                    
+                    Spacer()
+                    
+                    Text("حساب:")
                         .font(Font.custom("BYekan+", size: 16))
-                        .datePickerStyle(.compact)
-                        .environment(\.locale, Locale.init(identifier: "fa_IR"))
-                        .environment(\.calendar,Calendar(identifier: .persian))
-                        .environment(\.layoutDirection, .rightToLeft)
-                        .padding(.leading)
+                    
                 }
+                
+                dateSeclectorView
             }
         }
+        .sheet(isPresented: $showBankView, content: {
+            BankView()
+        })
         .padding()
-        //        .font(.headline)
+    }
+    
+    private var bankSelectionView: some View {
+        ZStack {
+            VStack {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack {
+                        ForEach(vm.portfolioDataService.bankEntities) { item in
+                            HStack {
+                                VStack{
+                                    Text("\(item.name ?? "")")
+                                        .font(Font.custom("BYekan+", size: 24)).lineLimit(1).minimumScaleFactor(0.1)
+                                    Spacer()
+                                    Text("\(item.code.asCreaditCardString())") .font(Font.custom("BYekan+", size: 18)).lineLimit(1).minimumScaleFactor(0.1)
+                                }.padding().frame(width: UIScreen.main.bounds.width * 0.6 , height: UIScreen.main.bounds.height * 0.45 ).background(.ultraThinMaterial).cornerRadius(15)
+                            }
+                            .onTapGesture {
+                                selectedAccount = item.name ?? ""
+                                withAnimation{
+                                    showBankSelectionView.toggle()
+                                }
+                            }
+                        }
+                    }
+                }
+                .padding()
+                
+            }
+            VStack{
+                HStack{
+                    Spacer()
+                    RoundedRectangle(cornerRadius: 15).frame(width: 60, height: 4).foregroundColor(Color.theme.SecondaryText.opacity(0.5))
+                    Spacer()
+                }
+                Spacer()
+            }
+            .padding(.top, 10)
+        }
     }
     
     //View: Portfolio Input Sections
@@ -367,8 +529,8 @@ extension PortfolioView {
                             .padding()
                             .background(.ultraThinMaterial).cornerRadius(10)
                             .onTapGesture {
-                                            priceIsFocused = true
-                                        }
+                                priceIsFocused = true
+                            }
                             .padding()
                             .onAppear {
                                 self.priceText = selectedCoin?.currentPrice.asCurrencyWith6DecimalsENG() ?? ""
@@ -393,12 +555,12 @@ extension PortfolioView {
                             .padding()
                             .background(.ultraThinMaterial).cornerRadius(10)
                             .onTapGesture {
-                                            noteIsFocused = true
-                                        }
-    //                        .shadow(color: Color.theme.shadowColor.opacity(0.6), radius: 5, x: 0, y: 0)
+                                noteIsFocused = true
+                            }
+                        //                        .shadow(color: Color.theme.shadowColor.opacity(0.6), radius: 5, x: 0, y: 0)
                             .padding()
-
-                            
+                        
+                        
                         
                         Spacer()
                         Text("یادداشت:")
@@ -407,16 +569,7 @@ extension PortfolioView {
                         
                     }
                     
-                    
-                    HStack {
-                        DatePicker(selection: $vm.dateAdded , label: { Text("تاریخ:")})
-                            .font(Font.custom("BYekan+", size: 16))
-                            .datePickerStyle(.compact)
-                            .environment(\.locale, Locale.init(identifier: "fa_IR"))
-                            .environment(\.calendar,Calendar(identifier: .persian))
-                            .environment(\.layoutDirection, .rightToLeft)
-                            .padding(.leading)
-                    }
+                    dateSeclectorView
                     
                     HStack {
                         Text("بستن")
@@ -428,7 +581,7 @@ extension PortfolioView {
                         }
                         
                     }
-
+                    
                 }
                 
                 Divider()
@@ -498,15 +651,6 @@ extension PortfolioView {
     
     private var trailingNavBarButton: some View {
         HStack(spacing: 10) {
-            //            Image(systemName: ).foregroundColor(Color.theme.green)
-            //                .font(.title)
-            //                .opacity( 1.0 : 0.0)
-            
-            //                Image(systemName: showCheckmark ? "checkmark.circle.fill" : "plus.circle.fill")
-            //                    .disabled((!showCheckmark && selectedCoin != nil && selectedCoin?.currentHoldings != Double(quantityText)) ? false : true )
-            //                    .foregroundColor(showCheckmark ? Color.theme.green : Color.theme.accent)
-            //                    .font(.title)
-            
             Button {
                 saveButtonPressed()
                 HapticManager.notification(type: showCheckmark ? .success : .error)
@@ -516,7 +660,12 @@ extension PortfolioView {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundColor(Color.theme.green)
                         .font(.title)
-                } else if (Double(quantityText) != nil && Double(quantityText) != 0) {
+                } else if goldSelector && selectedGoldType == "انتخاب کنید" {
+                    Image(systemName: "plus.circle.fill")
+                        .disabled(true)
+                        .font(.title)
+                }
+                else if (Double(quantityText) != nil && Double(quantityText) != 0) {
                     Image(systemName: "plus.circle.fill")
                         .foregroundColor(Color.theme.accent)
                         .font(.title)
@@ -564,9 +713,9 @@ extension PortfolioView {
             
             //save to portfolio
             if sold {
-                portfolioDataService.addCustom(amount: (amount * -1), date: vm.dateAdded, note: noteText )
+                portfolioDataService.addCustom(amount: (amount * -1), date: vm.dateAdded, note: noteText, bank: selectedAccount )
             } else {
-                portfolioDataService.addCustom(amount: amount, date: vm.dateAdded, note: noteText)
+                portfolioDataService.addCustom(amount: amount, date: vm.dateAdded, note: noteText, bank: selectedAccount)
             }
             
             //show checkmark
@@ -587,7 +736,7 @@ extension PortfolioView {
                 vm.dateAdded = Date.now
             }
             
-        } else {
+        } else if cryptoSelector {
             guard let coin = selectedCoin,
                   let amount = Double(quantityText), amount != 0
                     
@@ -599,9 +748,6 @@ extension PortfolioView {
             } else {
                 vm.updatePortfolio(coin: coin, amount: amount, date: vm.dateAdded)
             }
-            
-            
-            
             
             //show checkmark
             withAnimation(.easeIn) {
@@ -618,6 +764,42 @@ extension PortfolioView {
                     showCheckmark = false
                 }
             }
+        } else if goldSelector {
+            
+            guard let amount = Double(quantityText), amount != 0
+                  
+            else { return }
+            
+            //save to portfolio
+            if selectedGoldType != "انتخاب کنید" {
+                if sold {
+                    portfolioDataService.addGold(name: selectedGoldType, amount: (amount * -1), note: noteText, date: vm.dateAdded)
+                } else {
+                    portfolioDataService.addGold(name: selectedGoldType, amount: amount, note: noteText, date: vm.dateAdded)
+                }
+            } else {
+                return
+            }
+            
+            
+            //show checkmark
+            withAnimation(.easeIn) {
+                showCheckmark = true
+                removeSelectedCoin()
+            }
+            
+            //hide keyboard
+            UIApplication.shared.endEditing()
+            
+            //hide checkmark
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                withAnimation(.easeOut) {
+                    showCheckmark = false
+                }
+                vm.irAmountCalc()
+                vm.dateAdded = Date.now
+            }
+            
         }
         
     }
@@ -627,6 +809,4 @@ extension PortfolioView {
         selectedCoin = nil
         vm.searchField = ""
     }
-    
-    
 }

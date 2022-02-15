@@ -12,6 +12,7 @@ struct SettingsView: View {
     
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var vm = HomeViewModel()
+    @StateObject var authManager = AuthenticationManager()
     @State private var trendUpDown: Bool = false
     
     var body: some View {
@@ -20,6 +21,64 @@ struct SettingsView: View {
             List {
                 Section {
                     HStack{
+                        switch authManager.biometryType {
+                        case .faceID:
+                            
+                            HStack {
+                                Text(vm.authState ? "فعال" : "غیرفعال")
+                                    .frame(width: 50, height: 10)
+                                    .padding()
+                                    .background(.ultraThinMaterial).cornerRadius(10)
+                                    .foregroundColor(vm.authState ? Color.theme.green : Color.theme.red)
+                                    .font(Font.custom("BYekan+", size: 16))
+                                    .onTapGesture {
+                                        vm.authState.toggle()
+                                    }
+                                Spacer()
+                                Text("ورود با تشخیص چهره")
+                                    .font(Font.custom("BYekan+", size: 14))
+                                Image(systemName: "faceid")
+                            }
+                            
+                        case .touchID:
+                            
+                            HStack {
+                                Text(vm.authState ? "فعال" : "غیرفعال")
+                                    .frame(width: 50, height: 10)
+                                    .padding()
+                                    .background(.ultraThinMaterial).cornerRadius(10)
+                                    .foregroundColor(vm.authState ? Color.theme.green : Color.theme.red)
+                                    .font(Font.custom("BYekan+", size: 16))
+                                    .onTapGesture {
+                                        vm.authState.toggle()
+                                    }
+                                Spacer()
+                                Text("ورود با اثرانگشت")
+                                    .font(Font.custom("BYekan+", size: 14))
+                                Image(systemName: "touchid")
+                            }
+                            
+                        default:
+                            
+                            HStack {
+                                Text(vm.authState ? "فعال" : "غیرفعال")
+                                    .frame(width: 50, height: 10)
+                                    .padding()
+                                    .background(.ultraThinMaterial).cornerRadius(10)
+                                    .foregroundColor(vm.authState ? Color.theme.green : Color.theme.red)
+                                    .font(Font.custom("BYekan+", size: 16))
+                                    .onTapGesture {
+                                        vm.authState.toggle()
+                                    }
+                                Spacer()
+                                Text("ورود با رمز عبور")
+                                    .font(Font.custom("BYekan+", size: 14))
+                                Image(systemName: "person.fill")
+                            }
+                        }
+                    }
+                    
+                    HStack{
                         
                         HStack {
                             Text("دلار")
@@ -27,7 +86,7 @@ struct SettingsView: View {
                                 .padding()
                                 .background(.ultraThinMaterial).cornerRadius(10)
                                 .font(Font.custom("BYekan+", size: 16))
-                                .foregroundColor(!vm.showCurrencyChange ? Color.theme.accent : Color.theme.shadowColor)
+                                .foregroundColor(!vm.showCurrencyChange ? Color.theme.green : Color.theme.bwColor)
                                 .onTapGesture {
                                     vm.showCurrencyChange = false
                                 }
@@ -36,7 +95,7 @@ struct SettingsView: View {
                                 .padding()
                                 .background(.ultraThinMaterial).cornerRadius(10)
                                 .font(Font.custom("BYekan+", size: 16))
-                                .foregroundColor(vm.showCurrencyChange ? Color.theme.accent : Color.theme.shadowColor)
+                                .foregroundColor(vm.showCurrencyChange ? Color.theme.green : Color.theme.bwColor)
                                 
                                 
                                 .onTapGesture {
@@ -44,72 +103,71 @@ struct SettingsView: View {
                                 }
                         }
                         
-                        
-                        
                         Spacer()
                         
                         Text("واحد نمایش")
                             .font(Font.custom("BYekan+", size: 14))
+                        Image(systemName: "bitcoinsign.square")
                         
                         
                     }
                     
                     
                     
-                    HStack {
-                        HStack {
-                            Text("کم به زیاد")
-                                .frame(width: 60)
-                                .padding().background(trendUpDown ? Color.theme.SecondaryText : Color.theme.accent).cornerRadius(15).font(Font.custom("BYekan+", size: 14))
-                                .onTapGesture {
-                                    trendUpDown = true
-                                }
-                            Text("زیاد به کم")
-                                .frame(width: 60)
-                                .padding().background(!trendUpDown ? Color.theme.SecondaryText : Color.theme.accent).cornerRadius(15).font(Font.custom("BYekan+", size: 14))
-                                .onTapGesture {
-                                    trendUpDown = false
-                                }
-                            
-                        }
-                        
-                        Spacer()
-                        
-                        Text("شیوه‌ی نمایش")
-                            .font(Font.custom("BYekan+", size: 14))
-                     
+//                    HStack {
+//                        HStack {
+//                            Text("کم به زیاد")
+//                                .frame(width: 60)
+//                                .padding().background(trendUpDown ? Color.theme.SecondaryText : Color.theme.accent).cornerRadius(15).font(Font.custom("BYekan+", size: 14))
+//                                .onTapGesture {
+//                                    trendUpDown = true
+//                                }
+//                            Text("زیاد به کم")
+//                                .frame(width: 60)
+//                                .padding().background(!trendUpDown ? Color.theme.SecondaryText : Color.theme.accent).cornerRadius(15).font(Font.custom("BYekan+", size: 14))
+//                                .onTapGesture {
+//                                    trendUpDown = false
+//                                }
+//
+//                        }
+//
+//                        Spacer()
+//
+//                        Text("شیوه‌ی نمایش")
+//                            .font(Font.custom("BYekan+", size: 14))
+//
+//
+//                    }
                     
-                    }
-                    
-                    HStack {
-                        
-                        
-                        Text("مقدار دارایی")
-                            .frame(width: 30)
-                            .padding().background(vm.sortOptions == .holding || vm.sortOptions == .holdingReversed ? Color.theme.accent : Color.theme.SecondaryText).cornerRadius(15).font(Font.custom("BYekan+", size: 14))
-                            .onTapGesture {
-                                
-                            }
-                        Text("تغییر در ۲۴ ساعت")
-                            .frame(width: 30)
-                            .padding().background(vm.showCurrencyChange ? Color.theme.accent : Color.theme.SecondaryText).cornerRadius(15).font(Font.custom("BYekan+", size: 14))
-                            .onTapGesture {
-                                vm.showCurrencyChange = true
-                            }
-                        Text("قیمت")
-                            .frame(width: 30)
-                            .padding().background(vm.showCurrencyChange ? Color.theme.accent : Color.theme.SecondaryText).cornerRadius(15).font(Font.custom("BYekan+", size: 14))
-                            .onTapGesture {
-                                vm.showCurrencyChange = true
-                            }
-                        Text("رتبه")
-                            .frame(width: 30)
-                            .padding().background(vm.showCurrencyChange ? Color.theme.accent : Color.theme.SecondaryText).cornerRadius(15).font(Font.custom("BYekan+", size: 14))
-                            .onTapGesture {
-                                vm.showCurrencyChange = true
-                            }
-                        
-                    }
+//                    HStack {
+//
+//
+//                        Text("مقدار دارایی")
+//                            .frame(width: 30)
+//                            .padding().background(vm.sortOptions == .holding || vm.sortOptions == .holdingReversed ? Color.theme.accent : Color.theme.SecondaryText).cornerRadius(15).font(Font.custom("BYekan+", size: 14))
+//                            .onTapGesture {
+//
+//                            }
+//                        Text("تغییر در ۲۴ ساعت")
+//                            .frame(width: 30)
+//                            .padding().background(vm.showCurrencyChange ? Color.theme.accent : Color.theme.SecondaryText).cornerRadius(15).font(Font.custom("BYekan+", size: 14))
+//                            .onTapGesture {
+//                                vm.showCurrencyChange = true
+//                            }
+//                        Text("قیمت")
+//                            .frame(width: 30)
+//                            .padding().background(vm.showCurrencyChange ? Color.theme.accent : Color.theme.SecondaryText).cornerRadius(15).font(Font.custom("BYekan+", size: 14))
+//                            .onTapGesture {
+//                                vm.showCurrencyChange = true
+//                            }
+//                        Text("رتبه")
+//                            .frame(width: 30)
+//                            .padding().background(vm.showCurrencyChange ? Color.theme.accent : Color.theme.SecondaryText).cornerRadius(15).font(Font.custom("BYekan+", size: 14))
+//                            .onTapGesture {
+//                                vm.showCurrencyChange = true
+//                            }
+//
+//                    }
                     
                 } header: {
                     HStack {
@@ -117,7 +175,7 @@ struct SettingsView: View {
                         Image("logo")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 100, height: 100)
+                            .frame(width: 80, height: 80)
                             .clipShape(RoundedRectangle(cornerRadius: 15))
                             .padding()
                         Spacer()
@@ -164,5 +222,6 @@ struct SettingsView: View {
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
         SettingsView()
+            .preferredColorScheme(.dark)
     }
 }

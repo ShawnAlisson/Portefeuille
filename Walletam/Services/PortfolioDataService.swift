@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreData
+import SwiftUI
 
 
 class PortfolioDataService {
@@ -23,6 +24,7 @@ class PortfolioDataService {
 //    @Published var transactionEntities: [TransEntity] = []
     @Published var irEntities: [IREntity] = []
     @Published var bankEntities: [BankEntity] = []
+    @Published var goldEntities: [GoldEntity] = []
 
     init() {
         container = NSPersistentContainer(name: containerName)
@@ -72,6 +74,13 @@ class PortfolioDataService {
             print("⚠️Error fetching Bank Entities. \(error.localizedDescription)")
         }
         
+        let goldRequest = NSFetchRequest<GoldEntity>(entityName: "GoldEntity")
+        do {
+            goldEntities = try container.viewContext.fetch(goldRequest)
+        } catch let error {
+            print("⚠️Error fetching Gold Entities. \(error.localizedDescription)")
+        }
+        
         let IRRequest = NSFetchRequest<IREntity>(entityName: "IREntity")
         let sort = NSSortDescriptor(key: "date", ascending: false)
         IRRequest.sortDescriptors = [sort]
@@ -83,12 +92,13 @@ class PortfolioDataService {
         
     }
     
-    func addCustom(amount: Double, date: Date, note: String) {
+    func addCustom(amount: Double, date: Date, note: String, bank: String) {
         let entity = IREntity(context: container.viewContext)
         
         entity.amount = amount
         entity.date = date
         entity.note = note
+        entity.bank = bankEntities.first(where: { $0.name == bank } )
         applyChanges()
     }
     
@@ -98,6 +108,17 @@ class PortfolioDataService {
         entity.name = name
         entity.code = code
         entity.note = note
+//        entity.color = color
+        applyChanges()
+    }
+    
+    func addGold(name: String, amount: Double, note: String, date: Date) {
+        let entity = GoldEntity(context: container.viewContext)
+        
+        entity.name = name
+        entity.amount = amount
+        entity.note = note
+        entity.date = date
         applyChanges()
     }
 

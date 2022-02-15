@@ -17,26 +17,33 @@ struct HomeStatsView: View {
     var body: some View {
         
         if showPrices {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack {
-                    ForEach(vm.statistic) {stat in
-                        StatisticView(stat: stat)
-                            
+            VStack{
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack {
+                        ForEach(vm.statistic) {stat in
+                            StatisticView(stat: stat)
+                                
+                        }
+                        .frame(width: UIScreen.main.bounds.width / 3 ,height: 70 ,alignment: .center)
+                            .padding()
+                            .background(RoundedRectangle(cornerRadius: 10)
+                                            .fill(Color.theme.background))
+                            .shadow(color: Color.theme.shadowColor.opacity(0.3), radius: 5, x: 0, y: 0)
+                            .padding(5)
+                            .ignoresSafeArea()
                     }
-                    .frame(width: UIScreen.main.bounds.width / 3,height: 70 ,alignment: .center)
-                        .padding()
-                        .background(RoundedRectangle(cornerRadius: 10)
-                                        .fill(Color.theme.background))
-                        .shadow(color: Color.theme.shadowColor.opacity(0.3), radius: 5, x: 0, y: 0)
-                        .padding(5)
+                    
+                   
+        //          .frame(//width: UIScreen.main.bounds.width,
+        //            alignment: .leading)
                 }
                 
-               .padding()
-    //          .frame(//width: UIScreen.main.bounds.width,
-    //            alignment: .leading)
+                .environment(\.layoutDirection, .rightToLeft)
+
             }
-            .environment(\.layoutDirection, .rightToLeft)
-        } else {
+            .frame(width:UIScreen.main.bounds.width * 0.95)
+            
+                    } else {
             portfolioOverview
         }
         
@@ -46,7 +53,7 @@ struct HomeStatsView: View {
 //MARK: PREVIEW
 struct HomeStatsView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeStatsView(showPrices: .constant(false))
+        HomeStatsView(showPrices: .constant(true))
             .environmentObject(dev.homeVM)
 //            .preferredColorScheme(.dark)
     }

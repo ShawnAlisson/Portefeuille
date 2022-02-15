@@ -15,6 +15,7 @@ struct HomeView: View {
     }
     
     @EnvironmentObject private var vm: HomeViewModel
+    @StateObject var authManager = AuthenticationManager()
     
     @State private var showPrices: Bool = false
     @State private var showPortfolioView: Bool = false
@@ -22,6 +23,7 @@ struct HomeView: View {
     @State private var showDetailView: Bool = false
     @State private var showTranView: Bool = false
     @State private var showIRTransView: Bool = false
+    @State private var showGoldView: Bool = false
     @State private var animationAmount = 0.3
     
     @State private var selectedCoin: CoinModel? = nil
@@ -33,88 +35,103 @@ struct HomeView: View {
     var body: some View {
         
         ZStack {
-            //background layer
-            Color.theme.background
-                .ignoresSafeArea()
-                .sheet(isPresented: $showPortfolioView, content: {
-                    PortfolioView()
-                        .environmentObject(vm)
-                        .onAppear(perform: {
-                            self.vm.dateAdded = Date.now
-                        })
-                        .onDisappear(perform: vm.portfolioDataService.getPortfolio)
-                })
-            
-            //content layer
-            VStack {
+//        if authManager.isAuthenticated {
+            ZStack {
+                //background layer
+                Color.theme.background
+                    .ignoresSafeArea()
+                    
+                    .sheet(isPresented: $showPortfolioView, content: {
+                        PortfolioView()
+                            .environmentObject(vm)
+                            .onAppear(perform: {
+                                self.vm.dateAdded = Date.now
+                            })
+                            .onDisappear(perform: vm.portfolioDataService.getPortfolio)
+                    })
                 
-                //Prices View
-                if showPrices {
-                    allCoinsList
-                }
-                
-                //Portfolio View
-                if !showPrices {
-                    ZStack(alignment: .top) {
-                        //show startup screen if portfolio is empty
-                        if vm.portfolioDataService.savedEntities.isEmpty && vm.searchField.isEmpty && vm.portfolioDataService.irEntities.isEmpty {emptyPortfolioList } else if vm.portfolioCoins.isEmpty && vm.portfolioDataService.irEntities.isEmpty {loadingPortfolioList} else {portfolioList}
+                //content layer
+                VStack {
+                    
+                    //Prices View
+                    if showPrices {
+                        allCoinsList
                     }
+                    
+                    //Portfolio View
+                    if !showPrices {
+                        ZStack(alignment: .top) {
+                            //show startup screen if portfolio is empty
+                            if vm.portfolioDataService.savedEntities.isEmpty && vm.searchField.isEmpty && vm.portfolioDataService.irEntities.isEmpty {emptyPortfolioList } else if vm.portfolioCoins.isEmpty && vm.portfolioDataService.irEntities.isEmpty {loadingPortfolioList} else {portfolioList}
+                        }
+                    }
+                    
+                    Spacer(minLength: 0)
+                    
                 }
+                .redacted(when: vm.isLoading)
+                .opacity(animationAmount)
+                        .animation(Animation
+                                    .easeInOut(duration: 1)
+                                    .repeatForever(autoreverses: true), value: animationAmount)
+                        .onAppear { animationAmount = 0.8 }
                 
-                Spacer(minLength: 0)
+                        .background(NavigationLink(
+                            destination: GoldView(),
+                            isActive: $showGoldView,
+                            label: { EmptyView() }))
+                    
+                //Settings View Sheet
+                .sheet(isPresented: $showSettingsView, content: {
+                    SettingsView()
+                })
                 
+                //Navigation Link for Detail View
+                .background(
+                    NavigationLink(
+                        destination: DetailLoadingView(coin: $selectedCoin),
+                        isActive: $showDetailView,
+                        label: { EmptyView() })
+                )
+                
+                //Custom Tab Bar
+                VStack{
+                    Spacer()
+                    customTabBar
+                        .padding(.bottom, 5)
+                }
+                .ignoresSafeArea()
+                //            .unredacted()
+                
+                //Navigation Link for Transaction View
+                .background(NavigationLink(
+                    destination: TransactionLoadingView(coin: $selectedCoin),
+                    isActive: $showTranView,
+                    label: { EmptyView() }))
             }
-            .redacted(when: vm.isLoading)
-            .opacity(animationAmount)
-                    .animation(Animation
-                                .easeInOut(duration: 1)
-                                .repeatForever(autoreverses: true), value: animationAmount)
-                    .onAppear { animationAmount = 0.8 }
-            
-            
-            //Settings View Sheet
-            .sheet(isPresented: $showSettingsView, content: {
-                SettingsView()
-            })
-            
-            //Navigation Link for Detail View
             .background(
                 NavigationLink(
-                    destination: DetailLoadingView(coin: $selectedCoin),
-                    isActive: $showDetailView,
+                    destination: IRTransactionView(),
+                    isActive: $showIRTransView,
                     label: { EmptyView() })
             )
-            
-            //Custom Tab Bar
-            VStack{
-                Spacer()
-                customTabBar
-                    .padding(.bottom, 5)
-            }
-            .ignoresSafeArea()
-            //            .unredacted()
-            
-            //Navigation Link for Transaction View
-            .background(NavigationLink(
-                destination: TransactionLoadingView(coin: $selectedCoin),
-                isActive: $showTranView,
-                label: { EmptyView() }))
-        }
-        .background(
-            NavigationLink(
-                destination: IRTransactionView(),
-                isActive: $showIRTransView,
-                label: { EmptyView() })
-        )
-        .toolbar(content: {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("بستن") {
-                    searchIsFocused = false
+            .toolbar(content: {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("بستن") {
+                        searchIsFocused = false
+                    }
+                    .font(Font.custom("BYekan", size: 18))
                 }
-                .font(Font.custom("BYekan", size: 18))
-            }
-        })
+            })
+//        } else {
+//            LoginView()
+//                .environmentObject(authManager)
+//
+//        }
+        }
+        
+        
     }
 }
 
@@ -186,7 +203,7 @@ extension HomeView {
 
                 }
                             } header: {
-                HomeStatsView(showPrices: $showPrices)
+                                HomeStatsView(showPrices: $showPrices)
                 SearchBarView(searchField: $vm.searchField)
                     .focused($searchIsFocused)
                     .onTapGesture {
@@ -268,6 +285,12 @@ extension HomeView {
                 }
             }
             
+            Section {
+                if !vm.portfolioDataService.goldEntities.isEmpty {
+                goldPortfolioView
+                }
+            }
+            
         footer: {
             Text("").frame(height: 50)
         }
@@ -279,6 +302,26 @@ extension HomeView {
         .refreshable {
             vm.reloadData()
         }
+    }
+    
+    private var goldPortfolioView: some View {
+        HStack{
+            HStack {
+                Image(systemName: "circlebadge.2.fill").resizable().scaledToFit().frame(width: 45, height: 45).foregroundColor(Color.yellow)
+                
+                Text("سکه و طلا").font(Font.custom("BYekan+", size: 16))
+            }
+            
+            Spacer()
+            
+            HStack {
+                Text("helo")
+            }
+            
+        }.background(Color.theme.background.opacity(0.001))
+            .onTapGesture {
+                segueGold()
+            }
     }
     
     //View: Toman Portfolio
@@ -312,10 +355,7 @@ extension HomeView {
                         Text("\( (newPrice*10).asCurrencyWith2Decimals() )")
                             .font(Font.custom("BYekan+", size: 14)).foregroundColor(Color.theme.SecondaryText)
                     }
-                    
                 }
-                
-                
             }.background(Color.theme.background.opacity(0.001))
             .onTapGesture {
                 segueIRTran()
@@ -369,6 +409,9 @@ extension HomeView {
                 
             columnTitle.padding()
         }.redacted(reason: .placeholder)
+            
+        
+            
         Section {
                 if !vm.portfolioDataService.irEntities.isEmpty {
                     tomanPortfolioView
@@ -611,6 +654,10 @@ extension HomeView {
     
     private func segueIRTran() {
         showIRTransView.toggle()
+    }
+    
+    private func segueGold() {
+        showGoldView.toggle()
     }
 }
 

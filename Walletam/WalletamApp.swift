@@ -11,6 +11,7 @@ import SwiftUI
 struct WalletamApp: App {
     
     @StateObject private var vm = HomeViewModel()
+    @StateObject private var authManager = AuthenticationManager()
     @State private var showLaunchView: Bool = true
     
     var body: some Scene {
@@ -38,7 +39,14 @@ struct WalletamApp: App {
                 }
                 .zIndex(2.0)
                 
+                ZStack {
+                    if !authManager.isAuthenticated && vm.authState {
+                        LoginView()
+                            .environmentObject(authManager)
+                    }
+                }
             }
+            
         }
     }
 }

@@ -2,9 +2,16 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21D49" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="BankEntity" representedClassName="BankEntity" syncable="YES" codeGenerationType="class">
         <attribute name="code" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="color" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="note" optional="YES" attributeType="String"/>
         <relationship name="tomanTransaction" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="IREntity" inverseName="bank" inverseEntity="IREntity"/>
+    </entity>
+    <entity name="GoldEntity" representedClassName="GoldEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="note" optional="YES" attributeType="String"/>
     </entity>
     <entity name="IREntity" representedClassName="IREntity" syncable="YES" codeGenerationType="class">
         <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -23,7 +30,8 @@
         <relationship name="portfolio" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PortEntity" inverseName="transactions" inverseEntity="PortEntity"/>
     </entity>
     <elements>
-        <element name="BankEntity" positionX="-63" positionY="27" width="128" height="89"/>
+        <element name="BankEntity" positionX="-63" positionY="27" width="128" height="104"/>
+        <element name="GoldEntity" positionX="-54" positionY="54" width="128" height="89"/>
         <element name="IREntity" positionX="-63" positionY="18" width="128" height="89"/>
         <element name="PortEntity" positionX="-63" positionY="-18" width="128" height="74"/>
         <element name="TransEntity" positionX="-54" positionY="-9" width="128" height="74"/>

@@ -134,6 +134,10 @@ extension Double {
         return String(format: "%.2f", locale: Locale(identifier: "fa_IR"), self)
     }
     
+    func asEngNumberString() -> String {
+        return String(format: "%.2f", self)
+    }
+    
     func asPercentString() -> String {
         return asNumberString() + "%"
     }

@@ -39,12 +39,12 @@ class PortfolioDataService {
 
     // MARK: PUBLIC
 
-    func updatePortfolio(coin: CoinModel, amount: Double, date: Date) {
+    func updatePortfolio(coin: CoinModel, amount: Double, date: Date, note: String) {
         // check if coin is already in portfolio
         if let entity = savedEntities.first(where: { $0.coinID == coin.id }) {
-            update(entity: entity, amount: amount, date: date)
+            update(entity: entity, amount: amount, date: date, note: note)
         } else {
-            add(coin: coin, amount: amount, date: date)
+            add(coin: coin, amount: amount, date: date, note: note)
         }
     }
 
@@ -122,7 +122,7 @@ class PortfolioDataService {
         applyChanges()
     }
 
-    private func add(coin: CoinModel, amount: Double, date: Date) {
+    private func add(coin: CoinModel, amount: Double, date: Date, note: String) {
         
         let transEntity = TransEntity(context: container.viewContext)
         let entity = PortEntity(context: container.viewContext)
@@ -132,15 +132,17 @@ class PortfolioDataService {
         transEntity.amount = amount
         transEntity.portfolio = entity
         transEntity.date = date
+        transEntity.note = note
         applyChanges()
     }
 
-    private func update(entity: PortEntity, amount: Double, date: Date) {
+    private func update(entity: PortEntity, amount: Double, date: Date, note: String) {
 
         let newAmount = TransEntity(context: container.viewContext)
         newAmount.amount = amount
         newAmount.portfolio = entity
         newAmount.date = date
+        newAmount.note = note
         applyChanges()
     }
 
@@ -159,6 +161,13 @@ class PortfolioDataService {
     }
     
     func deleteIRItem(entity: IREntity) {
+        
+        container.viewContext.delete(entity)
+        applyChanges()
+        
+    }
+    
+    func deleteBankEntity(entity: BankEntity) {
         
         container.viewContext.delete(entity)
         applyChanges()

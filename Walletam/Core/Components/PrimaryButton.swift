@@ -12,6 +12,7 @@ struct PrimaryButton: View {
     var image: String?
     var showImage: Bool
     var text: String
+    var disabled: Bool?
     
     var body: some View {
         HStack {
@@ -26,8 +27,10 @@ struct PrimaryButton: View {
                     .scaledToFit()
                     .frame(width: 30, height: 30)
                     .foregroundColor(Color.theme.shadowColor)
+                    
             }
         }
+        .opacity((disabled ?? false) ? 0.3 : 1)
         .padding()
         .padding(.horizontal)
         .background(.white)
@@ -38,6 +41,6 @@ struct PrimaryButton: View {
 
 struct PrimaryButton_Previews: PreviewProvider {
     static var previews: some View {
-        PrimaryButton(image: "faceid", showImage: true, text: "ورود")
+        PrimaryButton(image: "faceid", showImage: true, text: "ورود", disabled: false)
     }
 }

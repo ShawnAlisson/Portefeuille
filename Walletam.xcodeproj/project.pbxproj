@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E40AA08E27BD957B00A23C13 /* CardVerticalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40AA08D27BD957B00A23C13 /* CardVerticalView.swift */; };
 		E413C47B2784E38500549A3A /* WalletamApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E413C47A2784E38500549A3A /* WalletamApp.swift */; };
 		E413C47D2784E38500549A3A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E413C47C2784E38500549A3A /* ContentView.swift */; };
 		E413C47F2784E38700549A3A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E413C47E2784E38700549A3A /* Assets.xcassets */; };
@@ -21,7 +22,6 @@
 		E41F452527850791001C5BED /* CoinModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41F452427850791001C5BED /* CoinModel.swift */; };
 		E41F452727851B22001C5BED /* CoinRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41F452627851B22001C5BED /* CoinRowView.swift */; };
 		E41F452927851BAF001C5BED /* PreviewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41F452827851BAF001C5BED /* PreviewProvider.swift */; };
-		E422E6C127B5C1E700D00040 /* BankView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E422E6C027B5C1E700D00040 /* BankView.swift */; };
 		E42AD3E72796C20B00812941 /* PortfolioModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42AD3E62796C20B00812941 /* PortfolioModel.swift */; };
 		E42AD3E927976E4900812941 /* TestCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42AD3E827976E4900812941 /* TestCoreData.swift */; };
 		E42C5A8B278E0A6800B73D99 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42C5A8A278E0A6800B73D99 /* HapticManager.swift */; };
@@ -42,6 +42,7 @@
 		E48C16C1279246F100051B9F /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48C16C0279246F100051B9F /* SettingsView.swift */; };
 		E491BB0C27A9C61D00EAF275 /* IRTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E491BB0B27A9C61D00EAF275 /* IRTransactionView.swift */; };
 		E4969F3627B974DB00594293 /* GoldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4969F3527B974DB00594293 /* GoldView.swift */; };
+		E4A5703B27BD083E0090C5DD /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A5703A27BD083E0090C5DD /* CardView.swift */; };
 		E4A670802789B3080003609D /* PortfolioDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A6707F2789B3080003609D /* PortfolioDataService.swift */; };
 		E4B2100227936F46002501E5 /* TransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B2100127936F46002501E5 /* TransactionView.swift */; };
 		E4B4631B27A2CB7A00A81E32 /* CustomCoinModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B4631A27A2CB7A00A81E32 /* CustomCoinModel.swift */; };
@@ -66,11 +67,11 @@
 		E4E8FAC027886E4F00EF140D /* HomeStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E8FABF27886E4F00EF140D /* HomeStatsView.swift */; };
 		E4EB5063279C35DD00282FD7 /* PortContainer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E4EB5061279C35DD00282FD7 /* PortContainer.xcdatamodeld */; };
 		E4EBEEF827AA7E9300744E73 /* SekkeDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EBEEF727AA7E9300744E73 /* SekkeDataService.swift */; };
-		E4EC16D2279C9460005865C5 /* TranscationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EC16D1279C9460005865C5 /* TranscationDetailView.swift */; };
 		E4FD6EF727BBCB4B00791D62 /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FD6EF627BBCB4B00791D62 /* PrimaryButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E40AA08D27BD957B00A23C13 /* CardVerticalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardVerticalView.swift; sourceTree = "<group>"; };
 		E413C4772784E38500549A3A /* Walletam.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Walletam.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E413C47A2784E38500549A3A /* WalletamApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletamApp.swift; sourceTree = "<group>"; };
 		E413C47C2784E38500549A3A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -86,7 +87,6 @@
 		E41F452427850791001C5BED /* CoinModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinModel.swift; sourceTree = "<group>"; };
 		E41F452627851B22001C5BED /* CoinRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinRowView.swift; sourceTree = "<group>"; };
 		E41F452827851BAF001C5BED /* PreviewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewProvider.swift; sourceTree = "<group>"; };
-		E422E6C027B5C1E700D00040 /* BankView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankView.swift; sourceTree = "<group>"; };
 		E42AD3E62796C20B00812941 /* PortfolioModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioModel.swift; sourceTree = "<group>"; };
 		E42AD3E827976E4900812941 /* TestCoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCoreData.swift; sourceTree = "<group>"; };
 		E42C5A8A278E0A6800B73D99 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
@@ -107,6 +107,7 @@
 		E48C16C0279246F100051B9F /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		E491BB0B27A9C61D00EAF275 /* IRTransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IRTransactionView.swift; sourceTree = "<group>"; };
 		E4969F3527B974DB00594293 /* GoldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoldView.swift; sourceTree = "<group>"; };
+		E4A5703A27BD083E0090C5DD /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		E4A6707F2789B3080003609D /* PortfolioDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioDataService.swift; sourceTree = "<group>"; };
 		E4A67086278A30480003609D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E4B2100127936F46002501E5 /* TransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionView.swift; sourceTree = "<group>"; };
@@ -132,7 +133,6 @@
 		E4E8FABF27886E4F00EF140D /* HomeStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeStatsView.swift; sourceTree = "<group>"; };
 		E4EB5062279C35DD00282FD7 /* PortContainer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PortContainer.xcdatamodel; sourceTree = "<group>"; };
 		E4EBEEF727AA7E9300744E73 /* SekkeDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SekkeDataService.swift; sourceTree = "<group>"; };
-		E4EC16D1279C9460005865C5 /* TranscationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscationDetailView.swift; sourceTree = "<group>"; };
 		E4FD6EF627BBCB4B00791D62 /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -242,7 +242,6 @@
 				E41F452627851B22001C5BED /* CoinRowView.swift */,
 				E4E8FABF27886E4F00EF140D /* HomeStatsView.swift */,
 				E4DCDF172788A4C000D7D720 /* PortfolioView.swift */,
-				E422E6C027B5C1E700D00040 /* BankView.swift */,
 				E4969F3527B974DB00594293 /* GoldView.swift */,
 			);
 			path = Views;
@@ -267,6 +266,8 @@
 				E4E8FABD278865E200EF140D /* StatisticView.swift */,
 				E4BED2A327A22CDF00B4D7D8 /* SocialLinksView.swift */,
 				E4FD6EF627BBCB4B00791D62 /* PrimaryButton.swift */,
+				E4A5703A27BD083E0090C5DD /* CardView.swift */,
+				E40AA08D27BD957B00A23C13 /* CardVerticalView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -368,7 +369,6 @@
 				E4B2100127936F46002501E5 /* TransactionView.swift */,
 				E491BB0B27A9C61D00EAF275 /* IRTransactionView.swift */,
 				E4E4CEA127957CBB00AF53DE /* TransactionViewModel.swift */,
-				E4EC16D1279C9460005865C5 /* TranscationDetailView.swift */,
 			);
 			path = Transaction;
 			sourceTree = "<group>";
@@ -485,6 +485,7 @@
 				E41DC69F27867652003BB807 /* CoinImageViewModel.swift in Sources */,
 				E43D23F72791B81400897061 /* ChartView.swift in Sources */,
 				E41DC69B2786738D003BB807 /* CoinImageView.swift in Sources */,
+				E4A5703B27BD083E0090C5DD /* CardView.swift in Sources */,
 				E413C47D2784E38500549A3A /* ContentView.swift in Sources */,
 				E4529A3F2791C1CC00CA8261 /* Date.swift in Sources */,
 				E4EBEEF827AA7E9300744E73 /* SekkeDataService.swift in Sources */,
@@ -495,12 +496,11 @@
 				E453C5132788956600E7971D /* MarketDataModel.swift in Sources */,
 				E413C47B2784E38500549A3A /* WalletamApp.swift in Sources */,
 				E4319BBF27B7D52F005AF6FC /* CharLimit.swift in Sources */,
-				E422E6C127B5C1E700D00040 /* BankView.swift in Sources */,
 				E4E8FABE278865E200EF140D /* StatisticView.swift in Sources */,
+				E40AA08E27BD957B00A23C13 /* CardVerticalView.swift in Sources */,
 				E4DE4F2B2786294800DB4E69 /* HomeViewModel.swift in Sources */,
 				E491BB0C27A9C61D00EAF275 /* IRTransactionView.swift in Sources */,
 				E4BB11D227930D4200203696 /* TethModel.swift in Sources */,
-				E4EC16D2279C9460005865C5 /* TranscationDetailView.swift in Sources */,
 				E41F45202784F84B001C5BED /* RecButtonView.swift in Sources */,
 				E4E8FABA2787B42300EF140D /* UIApplication.swift in Sources */,
 				E4E4FBF727877596002DEC8C /* LocalFileManager.swift in Sources */,

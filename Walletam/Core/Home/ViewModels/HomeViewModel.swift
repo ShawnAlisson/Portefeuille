@@ -104,8 +104,8 @@ class HomeViewModel: ObservableObject {
         
     }
     
-    func updatePortfolio(coin: CoinModel, amount: Double, date: Date) {
-        portfolioDataService.updatePortfolio(coin: coin, amount: amount, date: dateAdded)
+    func updatePortfolio(coin: CoinModel, amount: Double, date: Date, note: String) {
+        portfolioDataService.updatePortfolio(coin: coin, amount: amount, date: dateAdded, note: note)
     }
     
     func reloadData() {

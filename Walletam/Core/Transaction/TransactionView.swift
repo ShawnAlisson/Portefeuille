@@ -9,7 +9,6 @@ import SwiftUI
 
 struct TransactionLoadingView: View {
     
-    
     @Binding var coin: CoinModel?
     
     var body: some View {
@@ -29,6 +28,8 @@ struct TransactionView: View {
     @ObservedObject var vmm = HomeViewModel()
 //    @State private var refreshingID = UUID()
     @State var showInfoView: Bool = false
+    @State var coinDetailView: Bool = false
+    @State private var selectedTran: TransEntity? = nil
     
 //    let manage = PortfolioDataService.instance
     
@@ -59,8 +60,6 @@ struct TransactionView: View {
                                         }
                                     }
                                 }
-                                
-                                
                             }
                             
                             Spacer()
@@ -73,8 +72,13 @@ struct TransactionView: View {
                                 
                             }
                         }
+                        .background(Color.theme.background.opacity(0.001))
+                            .onTapGesture {
+                                tranSegue(tran: item)
+                            }
                         
-                    }.onDelete(perform: remove)
+                    }
+                    .onDelete(perform: remove)
                 }
             header: {
                     
@@ -82,6 +86,59 @@ struct TransactionView: View {
             }
 //            .id(refreshingID)
         }
+        .sheet(isPresented: $coinDetailView, content: {
+            ZStack {
+                List {
+                    Section {
+                        HStack {
+                            HStack(spacing: 5) {
+                                Text("تومان")
+                                    .font(Font.custom("BYekan+", size: 14))
+                                Text("\(selectedTran?.amount.asTomanWith2Decimals() ?? "-")").font(Font.custom("BYekan+", size: 14))
+                            }
+                            Spacer()
+                            Text("مقدار:").font(Font.custom("BYekan+", size: 16))
+                        }
+                        .padding(.horizontal)
+                        
+                        HStack{
+                            Text("\(selectedTran?.date?.asShortDateString() ?? "")").font(Font.custom("BYekan+", size: 14))
+                            Spacer()
+                            Text("تاریخ:").font(Font.custom("BYekan+", size: 16))
+                        }.padding(.horizontal)
+                        
+                        HStack{
+                            Text("\(selectedTran?.date?.asPersianTimeString() ?? "")").font(Font.custom("BYekan+", size: 14))
+                            Spacer()
+                            Text("ساعت:").font(Font.custom("BYekan+", size: 16))
+                        }.padding(.horizontal)
+                        
+                        VStack(alignment: .trailing) {
+                            HStack{
+                                Spacer()
+                                Text("یادداشت:").font(Font.custom("BYekan+", size: 16))
+                            }
+                            
+                            Text("\(selectedTran?.note ?? "")").font(Font.custom("BYekan+", size: 16))
+                                .multilineTextAlignment(.trailing)
+                        }
+                        .padding(.horizontal)
+                    }
+                header: {
+                    
+                }
+                }
+                VStack{
+                    HStack{
+                        Spacer()
+                        RoundedRectangle(cornerRadius: 15).frame(width: 60, height: 4).foregroundColor(Color.theme.SecondaryText.opacity(0.5))
+                        Spacer()
+                    }
+                    Spacer()
+                }
+                .padding(.top, 10)
+            }
+        })
         .navigationTitle(vm.coin.name)
         .toolbar {
             //                navigationBarTrailingItem
@@ -120,6 +177,11 @@ struct TransactionView: View {
             
         }
 }
+    private func tranSegue(tran: TransEntity) {
+        
+        selectedTran = tran
+        coinDetailView.toggle()
+    }
 }
 
 //MARK: PREVIEW

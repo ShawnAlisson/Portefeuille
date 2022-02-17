@@ -14,6 +14,7 @@ struct SettingsView: View {
     @ObservedObject var vm = HomeViewModel()
     @StateObject var authManager = AuthenticationManager()
     @State private var trendUpDown: Bool = false
+    @State private var showBankView: Bool = false
     
     var body: some View {
         
@@ -103,6 +104,7 @@ struct SettingsView: View {
                                 }
                         }
                         
+                        
                         Spacer()
                         
                         Text("واحد نمایش")
@@ -111,8 +113,7 @@ struct SettingsView: View {
                         
                         
                     }
-                    
-                    
+
                     
 //                    HStack {
 //                        HStack {
@@ -169,23 +170,54 @@ struct SettingsView: View {
 //
 //                    }
                     
-                } header: {
+                }
+                
+                Section {
                     HStack {
                         Spacer()
-                        Image("logo")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 80, height: 80)
-                            .clipShape(RoundedRectangle(cornerRadius: 15))
-                            .padding()
-                        Spacer()
-                    }
-                    
+                        Text("مدیریت حساب‌ها")
+                            .font(Font.custom("BYekan+", size: 14))
+                        Image(systemName: "creditcard")
+                    }.onTapGesture {
+                        showBankView.toggle()
+                    }.sheet(isPresented: $showBankView, content: {
+                        List {
+                            ForEach(vm.portfolioDataService.bankEntities) { item in
+                                VStack{
+                                    HStack{
+                                        Spacer()
+                                        Text("\(item.name ?? "")")
+                                            .font(Font.custom("BYekan+", size: 16))
+                                           
+                                    }
+                                    HStack{
+                                        Text("\(item.code.asCreaditCardString())")
+                                            .font(Font.custom("BYekan+", size: 14))
+                                            .foregroundColor(Color.theme.SecondaryText)
+                                        Spacer()
+                                    }
+                                }
+                            }
+                            .onDelete(perform: remove)
+                        }
+                    })
+                } header: {
+                                        
                 } footer: {
                     
                     VStack {
                         SocialLinksView(websiteURL: "https://walletam.ir", githubURL: "", redditURL: "", telegramURL: "walletam.ir", twitterURL: "https://twitter.com/walletam.ir")
-                        
+                        HStack {
+                            Spacer()
+                            Image("logo")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 80, height: 80)
+                                .clipShape(RoundedRectangle(cornerRadius: 15))
+                                .padding()
+                            Spacer()
+                        }
+
                         HStack {
                             Spacer()
                             VStack {
@@ -200,6 +232,8 @@ struct SettingsView: View {
                     
                     
                 }
+                
+                
 
             }
             .toolbar(content: {
@@ -215,6 +249,14 @@ struct SettingsView: View {
                 }
             })
         
+        }
+    }
+    
+    private func remove(at offsets: IndexSet) {
+        for index in offsets {
+            let item = vm.portfolioDataService.bankEntities[index]
+            vm.portfolioDataService.deleteBankEntity(entity: item)
+            
         }
     }
 }

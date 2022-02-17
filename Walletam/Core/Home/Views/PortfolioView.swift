@@ -30,6 +30,17 @@ struct PortfolioView: View {
     @FocusState private var priceIsFocused: Bool
     @FocusState private var searchIsFocused: Bool
     
+    @State var showAddBankView: Bool = false
+    
+    @State private var nameText: String = ""
+    @FocusState private var nameIsFocused: Bool
+    
+    @State private var codeText: String = ""
+    @FocusState private var codeIsFocused: Bool
+    
+    @State private var noteTextForBank: String = ""
+    @FocusState private var noteIsFocusedForBank: Bool
+    
     @State private var showBankView: Bool = false
     @State private var showBankSelectionView: Bool = false
     @State private var showGoldTypeSelectionView: Bool = false
@@ -427,14 +438,7 @@ extension PortfolioView {
                 }
                 
                 HStack {
-                    Image(systemName: "creditcard.and.123").resizable().scaledToFit().frame(width: 30, height: 30).padding().background(.ultraThinMaterial).cornerRadius(15)
-                        .onTapGesture {
-                            showBankView.toggle()
-                        }.padding()
-                    
-                    Spacer()
-                    
-                    Text(selectedAccount).font(Font.custom("BYekan+", size: 16)).lineLimit(1).minimumScaleFactor(0.1).frame(height: 30).frame(maxWidth: .infinity).padding().background(.ultraThinMaterial).cornerRadius(15).padding()
+                    Text(selectedAccount).font(Font.custom("BYekan+", size: 16)).lineLimit(1).minimumScaleFactor(0.1).frame(height: 20).frame(maxWidth: .infinity).padding().background(.ultraThinMaterial).cornerRadius(10).padding()
                         .onTapGesture {
                             showBankSelectionView.toggle()
                         }
@@ -449,38 +453,163 @@ extension PortfolioView {
                 dateSeclectorView
             }
         }
-        .sheet(isPresented: $showBankView, content: {
-            BankView()
-        })
-        .padding()
     }
     
-    private var bankSelectionView: some View {
-        ZStack {
-            VStack {
-                ScrollView(.horizontal, showsIndicators: false) {
+    private var addBankView: some View {
+            VStack{
+                HStack {
+                    Image(systemName: "chevron.left")
+                        .onTapGesture {
+                        showAddBankView.toggle()
+                        }.padding().padding(.top, 20)
+                    Spacer()
+                }
+                Spacer()
+                VStack{
                     HStack {
-                        ForEach(vm.portfolioDataService.bankEntities) { item in
-                            HStack {
-                                VStack{
-                                    Text("\(item.name ?? "")")
-                                        .font(Font.custom("BYekan+", size: 24)).lineLimit(1).minimumScaleFactor(0.1)
-                                    Spacer()
-                                    Text("\(item.code.asCreaditCardString())") .font(Font.custom("BYekan+", size: 18)).lineLimit(1).minimumScaleFactor(0.1)
-                                }.padding().frame(width: UIScreen.main.bounds.width * 0.6 , height: UIScreen.main.bounds.height * 0.45 ).background(.ultraThinMaterial).cornerRadius(15)
-                            }
+                        TextField("", text: $nameText)
+                            .focused($nameIsFocused)
+                            .multilineTextAlignment(.leading)
+                            .font(Font.custom("BYekan", size: 18))
+                            .padding()
+                            .background(.ultraThinMaterial).cornerRadius(10)
                             .onTapGesture {
-                                selectedAccount = item.name ?? ""
-                                withAnimation{
-                                    showBankSelectionView.toggle()
-                                }
+                                nameIsFocused = true
+                                        }
+                            .padding()
+                        
+                        Spacer()
+                        Text("نام حساب:")
+                            .font(Font.custom("BYekan+", size: 16))
+                        Spacer()
+                    }
+                    HStack {
+                        TextField("", text: $codeText)
+                            .limitInputLength(value: $codeText, length: 16)
+                            .focused($codeIsFocused)
+                            .keyboardType(.asciiCapableNumberPad)
+                            .multilineTextAlignment(.leading)
+                            .font(Font.custom("BYekan", size: 18))
+                            .padding()
+                            .background(.ultraThinMaterial).cornerRadius(10)
+                            .onTapGesture {
+                                codeIsFocused = true
+                                        }
+                            .padding()
+                        
+                        Spacer()
+                        Text("شماره کارت:")
+                            .font(Font.custom("BYekan+", size: 16))
+                        Spacer()
+                    }
+                    HStack {
+                        TextField("", text: $noteTextForBank)
+                            .focused($noteIsFocused)
+                            .font(Font.custom("BYekan", size: 16))
+                            .multilineTextAlignment(.trailing)
+                            .padding()
+                            .background(.ultraThinMaterial).cornerRadius(10)
+                            .onTapGesture {
+                                            noteIsFocusedForBank = true
+                                        }
+                            .padding()
+                        Spacer()
+                        Text("یادداشت:")
+                            .font(Font.custom("BYekan+", size: 16))
+                        Spacer()
+                    }
+                }
+                Spacer()
+                
+                PrimaryButton(image: "plus", showImage: true, text: "افزودن", disabled: (nameText.count > 0) ? false : true)
+                    
+            
+//                Text("افزودن").font(Font.custom("BYekan+", size: 22)).foregroundColor(Color.theme.background).padding().background(RoundedRectangle(cornerRadius: 15).foregroundColor((nameText.count > 0) ? Color.theme.accent : Color.theme.SecondaryText.opacity(0.5)).frame(width: UIScreen.main.bounds.width * 0.8, height: 60)).padding()
+                    
+                    .onTapGesture {
+                        if (nameText.count > 0) {
+                            saveBankInfo(name: nameText, code: codeText, note: noteText)
+                            showAddBankView.toggle()
+                            
+                        }
+                    }
+            }
+    }
+    
+    private var cardSelectionView: some View {
+        VStack {
+            HStack{
+                Image(systemName: "xmark")
+                    .font(.headline)
+                    .onTapGesture {
+                        showBankSelectionView.toggle()
+                    }
+                Spacer()
+                HStack(spacing: 3){
+                    
+                    Text("حساب جدید")
+                        .font(Font.custom("BYekan+", size: 18))
+                    Image(systemName: "plus.circle.fill")
+                        .font(.headline)
+                        .frame(width: 30, height: 30)
+                }
+                    .opacity(showAddBankView ? 0 : 1)
+                    .onTapGesture {
+                        showAddBankView.toggle()
+                    }
+            }.padding().padding(.top, 20)
+            
+            Spacer()
+            
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack {
+                    ForEach(vm.portfolioDataService.bankEntities) { item in
+                        CardVerticalView(code: item.code, name: item.name)
+                        .onTapGesture {
+                            selectedAccount = item.name ?? ""
+                            withAnimation{
+                                showBankSelectionView.toggle()
                             }
                         }
                     }
                 }
-                .padding()
-                
             }
+            .padding()
+            
+            Spacer()
+            
+        }
+        .onAppear(perform: vm.portfolioDataService.applyChanges)
+    }
+    
+    private var bankSelectionView: some View {
+        ZStack {
+        if vm.portfolioDataService.bankEntities.isEmpty && !showAddBankView {
+            VStack{
+                
+                Spacer()
+                
+                Image(systemName: "creditcard.and.123").resizable().scaledToFit().frame(width: 180, height: 180)
+                Text("هنوز حسابی ساخته نشده!")
+                    .font(Font.custom("BYekan+", size: 30))
+                
+                Spacer()
+                
+                PrimaryButton(image: "plus", showImage: true, text: "ساخت حساب جدید")
+                    .onTapGesture {
+                        showAddBankView.toggle()
+                    }
+            }
+           
+            
+        } else if showAddBankView {
+            
+                addBankView
+            
+           
+        } else {
+            cardSelectionView
+            
             VStack{
                 HStack{
                     Spacer()
@@ -491,6 +620,10 @@ extension PortfolioView {
             }
             .padding(.top, 10)
         }
+            
+                
+            }
+
     }
     
     //View: Portfolio Input Sections
@@ -579,9 +712,7 @@ extension PortfolioView {
                         withAnimation {
                             moreOptions.toggle()
                         }
-                        
                     }
-                    
                 }
                 
                 Divider()
@@ -744,9 +875,9 @@ extension PortfolioView {
             
             //save to portfolio
             if sold {
-                vm.updatePortfolio(coin: coin, amount: (amount * -1), date: vm.dateAdded)
+                vm.updatePortfolio(coin: coin, amount: (amount * -1), date: vm.dateAdded, note: noteText)
             } else {
-                vm.updatePortfolio(coin: coin, amount: amount, date: vm.dateAdded)
+                vm.updatePortfolio(coin: coin, amount: amount, date: vm.dateAdded, note: noteText)
             }
             
             //show checkmark
@@ -809,4 +940,11 @@ extension PortfolioView {
         selectedCoin = nil
         vm.searchField = ""
     }
+    
+    func saveBankInfo(name: String, code: String, note: String) {
+        let convertedCode = Double(code)
+        vm.portfolioDataService.addBank(name: name, code: convertedCode ?? 0, note: note)
+    }
 }
+
+

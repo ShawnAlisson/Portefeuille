@@ -11,7 +11,19 @@ import SwiftUI
 extension Color {
     
     static let theme = ColorTheme()
+    static let card = CardColor()
     
+}
+
+struct CardColor {
+    let blue = Color("blueCard")
+    let aqua = Color("aquaCard")
+    let purple = Color("purpleCard")
+    let red = Color("redCard")
+    let grey = Color("greyCard")
+    let yellow = Color("yellowCard")
+    let orange = Color("orangeCard")
+    let green = Color("greenCard")
 }
 
 struct ColorTheme {

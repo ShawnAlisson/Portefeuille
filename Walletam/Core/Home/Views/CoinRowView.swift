@@ -12,7 +12,6 @@ struct CoinRowView: View {
     let showHoldingColumn: Bool
     let showCurrencyChange: Bool
     
-    
     @EnvironmentObject private var vm: HomeViewModel
     
     let coin: CoinModel
@@ -33,29 +32,19 @@ struct CoinRowView: View {
             .font(.subheadline)
             .background(Color.theme.background.opacity(0.001))
         }
-        
     }
 }
 
-struct CoinRowView_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            CoinRowView(showHoldingColumn: false, showCurrencyChange: false, coin: dev.coin).previewLayout(.sizeThatFits)
-            CoinRowView(showHoldingColumn: true, showCurrencyChange: false, coin: dev.coin ).preferredColorScheme(.dark).previewLayout(.sizeThatFits)
-        }
-        
-        
-    }
-}
-
+//MARK: EXTENSIONS
 extension CoinRowView {
+    
+    //MARK: VIEWS
     private var leftColumn: some View {
         HStack(spacing: 5) {
             Text("\(coin.rank.engToFaInt())")
                 .font(Font.custom("BYekan+", size: 12))
                 .foregroundColor(Color.theme.SecondaryText)
                 .frame(minWidth: 30)
-            
             
             CoinImageView(coin: coin)
                 .frame(width: 30, height: 30)
@@ -65,12 +54,11 @@ extension CoinRowView {
                 .lineLimit(1)
                 .minimumScaleFactor(0.5)
                 .padding(.leading, 6)
-            //.foregroundColor(Color.theme.accent)
         }
-        
     }
-
+    
     private var leftColumnPortfolio: some View {
+        
         HStack(spacing: 5) {
             CoinImageView(coin: coin)
                 .frame(width: 45, height: 45)
@@ -80,10 +68,8 @@ extension CoinRowView {
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
                     .padding(.leading, 6)
-                //.foregroundColor(Color.theme.accent)
                 HStack {
                     if showCurrencyChange {
-                        
                         let newTethPrice = ((vm.tethPrice ?? "") as NSString).doubleValue
                         
                         Text("\((coin.currentPrice * newTethPrice / 10 ).asTomanWith6Decimals())")
@@ -95,10 +81,7 @@ extension CoinRowView {
                                 (coin.priceChangePercentage24H ?? 0) >= 0 ?
                                 Color.theme.green : Color.theme.red
                             )
-
-                        
                     } else if !showCurrencyChange {
-                        
                         Text("\(coin.currentPrice.asCurrencyWith6Decimals())")
                             .modifier(PersianTwelveSolo())
                             .foregroundColor(Color.theme.SecondaryText)
@@ -108,13 +91,9 @@ extension CoinRowView {
                                 (coin.priceChangePercentage24H ?? 0) >= 0 ?
                                 Color.theme.green : Color.theme.red
                             )
-
-                        
                     }
-                    
-                                    }
+                }
             }
-            
         }
     }
     
@@ -140,7 +119,6 @@ extension CoinRowView {
                     .modifier(PersianFourteenSolo())
                     .foregroundColor(Color.theme.SecondaryText)
             }
-           
         }
         .multilineTextAlignment(.trailing)
     }
@@ -178,7 +156,15 @@ extension CoinRowView {
             }
             
         }
-        
-        
+    }
+}
+
+//MARK: PREVIEW
+struct CoinRowView_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            CoinRowView(showHoldingColumn: false, showCurrencyChange: false, coin: dev.coin).previewLayout(.sizeThatFits)
+            CoinRowView(showHoldingColumn: true, showCurrencyChange: false, coin: dev.coin ).preferredColorScheme(.dark).previewLayout(.sizeThatFits)
+        }
     }
 }

@@ -10,59 +10,28 @@ import SwiftUI
 struct HomeStatsView: View {
     
     @EnvironmentObject private var vm: HomeViewModel
+    
     @ObservedObject var monitor = NetworkMonitor()
+    
     @Binding var showPrices: Bool
+    
     @State private var animationAmount = 0.3
     
     var body: some View {
-        
         if showPrices {
-            VStack{
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
-                        ForEach(vm.statistic) {stat in
-                            StatisticView(stat: stat)
-                                
-                        }
-                        .frame(width: UIScreen.main.bounds.width / 3 ,height: 70 ,alignment: .center)
-                            .padding()
-                            .background(RoundedRectangle(cornerRadius: 10)
-                                            .fill(Color.theme.background))
-                            .shadow(color: Color.theme.shadowColor.opacity(0.3), radius: 5, x: 0, y: 0)
-                            .padding(5)
-                            .ignoresSafeArea()
-                    }
-                    
-                   
-        //          .frame(//width: UIScreen.main.bounds.width,
-        //            alignment: .leading)
-                }
-                
-                .environment(\.layoutDirection, .rightToLeft)
-
-            }
-            .frame(width:UIScreen.main.bounds.width * 0.95)
-            
-                    } else {
+            cryptoMarketOverview
+        } else {
             portfolioOverview
         }
-        
     }
 }
 
-//MARK: PREVIEW
-struct HomeStatsView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeStatsView(showPrices: .constant(true))
-            .environmentObject(dev.homeVM)
-//            .preferredColorScheme(.dark)
-    }
-}
-
+//MARK: EXTENSIONS
 extension HomeStatsView {
     
+    //MARK: VIEWS
     var portfolioOverview: some View {
-     
+        
         VStack(alignment: .trailing, spacing: 0) {
             HStack{
                 Spacer()
@@ -88,7 +57,6 @@ extension HomeStatsView {
                             .foregroundColor(Color.theme.SecondaryText)
                     }
                 }
-                
             }
             
             HStack {
@@ -97,19 +65,19 @@ extension HomeStatsView {
                     HStack {
                         VStack(alignment: .leading){
                             
-                                Text("$ 1000")
-                                    .font(Font.custom("BYekan+", size: 50))
-                                Text("۳۰ ۰۰۰۰ تومان")
-                                    .font(Font.custom("BYekan+", size: 25))
+                            Text("$ 1000")
+                                .font(Font.custom("BYekan+", size: 50))
+                            Text("۳۰ ۰۰۰۰ تومان")
+                                .font(Font.custom("BYekan+", size: 25))
                         }
                         Spacer()
                     }
                     .redacted(reason: .placeholder)
                     .opacity(animationAmount)
-                            .animation(Animation
-                                        .easeInOut(duration: 1)
-                                        .repeatForever(autoreverses: true), value: animationAmount)
-                            .onAppear { animationAmount = 0.8 }
+                    .animation(Animation
+                                .easeInOut(duration: 1)
+                                .repeatForever(autoreverses: true), value: animationAmount)
+                    .onAppear { animationAmount = 0.8 }
                 } else {
                     HStack {
                         VStack(alignment: .leading, spacing: 5){
@@ -128,7 +96,7 @@ extension HomeStatsView {
                                 Text("\(vm.totalPortfolioToman().asTomanWith2Decimals())")
                                     .font(Font.custom("BYekan+", size: 15)).foregroundColor(Color.theme.SecondaryText)
                             }
-                                .environment(\.locale, Locale.init(identifier: "fa_IR"))
+                            .environment(\.locale, Locale.init(identifier: "fa_IR"))
                         }
                         Spacer()
                         
@@ -141,13 +109,13 @@ extension HomeStatsView {
                                         .lineLimit(1)
                                         .minimumScaleFactor(0.1)
                                         .font(Font.custom("BYekan+", size: 15)).foregroundColor(Color.theme.SecondaryText)
-                                        
+                                    
                                 } else {
                                     Text("\(vm.cryptoTotalCalc().asCurrencyWith2Decimals())")
                                         .lineLimit(1)
                                         .minimumScaleFactor(0.1)
                                         .font(Font.custom("BYekan+", size: 15)).foregroundColor(Color.theme.SecondaryText)
-                                        
+                                    
                                 }
                                 
                                 Image(systemName: "bitcoinsign.circle.fill")
@@ -163,7 +131,7 @@ extension HomeStatsView {
                                             .lineLimit(1)
                                             .minimumScaleFactor(0.1)
                                             .font(Font.custom("BYekan+", size: 15)).foregroundColor(Color.theme.SecondaryText)
-                                            
+                                        
                                         
                                     }
                                 } else {
@@ -171,25 +139,50 @@ extension HomeStatsView {
                                         .lineLimit(1)
                                         .minimumScaleFactor(0.1)
                                         .font(Font.custom("BYekan+", size: 15)).foregroundColor(Color.theme.SecondaryText)
-                                        
+                                    
                                 }
                                 
                                 Image(systemName: "creditcard.fill")
                             }
-//                            HStack {
-//                                Text("")
-//                                Image(systemName: "circlebadge.2.fill")
-//                            }
                         }
                     }
                 }
-                
-                
             }
-            
-            
-            
-        }.padding().frame(width:UIScreen.main.bounds.width * 0.95).background(.ultraThinMaterial).cornerRadius(15).shadow(color: Color.theme.shadowColor.opacity(0.6), radius: 25, x: 0, y: 0).padding()
+        }.padding()
+//            .frame(width:UIScreen.main.bounds.width * 0.95)
+            .background(.ultraThinMaterial).cornerRadius(15).shadow(color: Color.theme.shadowColor.opacity(0.6), radius: 25, x: 0, y: 0)
+//            .padding()
+            .ignoresSafeArea()
+    }
     
+    var cryptoMarketOverview: some View {
+        VStack{
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack {
+                    ForEach(vm.statistic) {stat in
+                        StatisticView(stat: stat)
+                        
+                    }
+                    .frame(width: UIScreen.main.bounds.width / 3 ,height: 70 ,alignment: .center)
+                    .padding()
+                    .background(RoundedRectangle(cornerRadius: 10)
+                                    .fill(Color.theme.background))
+                    .shadow(color: Color.theme.shadowColor.opacity(0.3), radius: 5, x: 0, y: 0)
+                    .padding(5)
+                    .ignoresSafeArea()
+                }
+            }
+            .environment(\.layoutDirection, .rightToLeft)
+        }
+        .frame(width:UIScreen.main.bounds.width * 0.95)
+    }
+}
+
+//MARK: PREVIEW
+struct HomeStatsView_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeStatsView(showPrices: .constant(true))
+            .environmentObject(dev.homeVM)
+        //            .preferredColorScheme(.dark)
     }
 }

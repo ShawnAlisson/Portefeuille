@@ -9,11 +9,11 @@ import SwiftUI
 
 struct SocialLinksView: View {
     
-    let websiteURL: String
-    let githubURL: String
-    let redditURL: String
-    let telegramURL: String
-    let twitterURL: String
+    let websiteURL: String?
+    let githubURL: String?
+    let redditURL: String?
+    let telegramURL: String?
+    let twitterURL: String?
     
     var body: some View {
         HStack(spacing: 25) {
@@ -47,8 +47,6 @@ struct SocialLinksView: View {
                         .frame(width: 31, height: 31)
                 }
             }
-            
-            
             
             if let telegramString = telegramURL,
                let url = URL(string: "https://t.me/\(telegramString)") {

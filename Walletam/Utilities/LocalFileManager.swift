@@ -39,7 +39,6 @@ class LocalFileManager {
         else { return nil }
         
         return UIImage(contentsOfFile: url.path)
-        
     }
     
     private func createFolderIfNeeded(folderName: String) {
@@ -54,7 +53,6 @@ class LocalFileManager {
                 print("Error Creating Directory \(folderName): \(error)")
             }
         }
-        
     }
     
     private func getURLForFolder(folderName: String) -> URL? {

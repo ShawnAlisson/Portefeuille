@@ -17,9 +17,7 @@ class DetailViewModel: ObservableObject {
     @Published var redditURL: String? = nil
     @Published var githubURL: String? = nil
     @Published var telegramURL: String? = nil
-    //@Published var coinFaID: String? = nil
-    
-    
+   
     @Published var coin: CoinModel
     
     private let coinDetailService: CoinDetailDataService
@@ -44,7 +42,6 @@ class DetailViewModel: ObservableObject {
             }
             .store(in: &cancellables)
         
-        
         coinDetailService.$coinDetails
             .sink { [weak self] (returnedDetails) in
                 self?.websiteURL = returnedDetails?.links?.homepage?.first
@@ -54,8 +51,6 @@ class DetailViewModel: ObservableObject {
                 //self?.coinFaID = returnedDetails?.localization?.ar
             }
             .store(in: &cancellables)
-        
-        
     }
     
     private func mapDataToStatistic(coinDetailModel: CoinDetailModel?, coinModel: CoinModel) -> (overview: [StatisticModel], additional: [StatisticModel], changeIn24h: [StatisticModel]) {
@@ -112,10 +107,7 @@ class DetailViewModel: ObservableObject {
             blockTimeStats, hashingStats, genesisDateStats
         ]
         
-        
-        
         return (overviewArray,additionalArray, chnageIn24HArray)
     }
-    
 }
 

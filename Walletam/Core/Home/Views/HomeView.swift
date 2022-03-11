@@ -42,7 +42,7 @@ struct HomeView: View {
                     .ignoresSafeArea()
                     
                     .sheet(isPresented: $showPortfolioView, content: {
-                        PortfolioView()
+                        ManagePortfolioView()
                             .environmentObject(vm)
                             .onAppear(perform: {
                                 self.vm.dateAdded = Date.now
@@ -76,10 +76,10 @@ struct HomeView: View {
                                     .repeatForever(autoreverses: true), value: animationAmount)
                         .onAppear { animationAmount = 0.8 }
                 
-                        .background(NavigationLink(
-                            destination: GoldView(),
-                            isActive: $showGoldView,
-                            label: { EmptyView() }))
+//                        .background(NavigationLink(
+//                            destination: GoldView(),
+//                            isActive: $showGoldView,
+//                            label: { EmptyView() }))
                     
                 //Settings View Sheet
                 .sheet(isPresented: $showSettingsView, content: {
@@ -111,7 +111,7 @@ struct HomeView: View {
             }
             .background(
                 NavigationLink(
-                    destination: IRTransactionView(),
+                    destination: TomanTransactionView(),
                     isActive: $showIRTransView,
                     label: { EmptyView() })
             )
@@ -285,11 +285,12 @@ extension HomeView {
                 }
             }
             
-            Section {
-                if !vm.portfolioDataService.goldEntities.isEmpty {
-                goldPortfolioView
-                }
-            }
+            //Future UPDATE
+//            Section {
+//                if !vm.portfolioDataService.goldEntities.isEmpty {
+//                goldPortfolioView
+//                }
+//            }
             
         footer: {
             Text("").frame(height: 50)
@@ -494,10 +495,12 @@ extension HomeView {
                             //}
                         }
                     
-                }.frame(width: UIScreen.main.bounds.width / 1.2, height: 52, alignment: .center)
+                }
+                .padding()
+//                .frame(width: UIScreen.main.bounds.width / 1.2, height: 52, alignment: .center)
             }
         }.background(.ultraThinMaterial).cornerRadius(15).shadow(color: Color.theme.shadowColor.opacity(0.6), radius: 25, x: 0, y: 0)
-                        .frame(width: UIScreen.main.bounds.width / 1.2, height: 52, alignment: .center)
+//                        .frame(width: UIScreen.main.bounds.width / 1.2, height: 52, alignment: .center)
                         .padding()
     }
     

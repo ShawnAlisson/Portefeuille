@@ -10,7 +10,6 @@ import SwiftUI
 import Combine
 
 class CoinImageService {
-    
     @Published var image: UIImage? = nil
     
     private var imageSubscription: AnyCancellable?
@@ -23,18 +22,13 @@ class CoinImageService {
         self.coin = coin
         self.imageName = coin.id
         getCoinImage()
-        
     }
     
     private func getCoinImage() {
-        
         if let savedImage = fileManager.getImage(imageName: imageName, folderName: folderName) {
             image = savedImage
-//            print("Image Loaded!")
         } else {
             downloadCoinImage()
-//            print("Image Downloaded!")
-            
         }
     }
     
@@ -52,6 +46,6 @@ class CoinImageService {
                 self.imageSubscription?.cancel()
                 self.fileManager.saveImage(image: downloadedImage, imageName: self.imageName, folderName: self.folderName)
             })
-                  }
-
+    }
+    
 }

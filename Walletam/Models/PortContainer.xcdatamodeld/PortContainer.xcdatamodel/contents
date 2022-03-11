@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21D49" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21D62" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="BankEntity" representedClassName="BankEntity" syncable="YES" codeGenerationType="class">
         <attribute name="code" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="color" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer"/>
@@ -20,12 +20,13 @@
         <relationship name="bank" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BankEntity" inverseName="tomanTransaction" inverseEntity="BankEntity"/>
     </entity>
     <entity name="PortEntity" representedClassName="PortEntity" syncable="YES" codeGenerationType="class">
-        <attribute name="change" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="coinID" optional="YES" attributeType="String"/>
+        <attribute name="favorite" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <relationship name="transactions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TransEntity" inverseName="portfolio" inverseEntity="TransEntity"/>
     </entity>
     <entity name="TransEntity" representedClassName="TransEntity" syncable="YES" codeGenerationType="class">
         <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="buyPrice" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="note" optional="YES" attributeType="String"/>
         <relationship name="portfolio" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PortEntity" inverseName="transactions" inverseEntity="PortEntity"/>
@@ -35,6 +36,6 @@
         <element name="GoldEntity" positionX="-54" positionY="54" width="128" height="89"/>
         <element name="IREntity" positionX="-63" positionY="18" width="128" height="89"/>
         <element name="PortEntity" positionX="-63" positionY="-18" width="128" height="74"/>
-        <element name="TransEntity" positionX="-54" positionY="-9" width="128" height="89"/>
+        <element name="TransEntity" positionX="-54" positionY="-9" width="128" height="104"/>
     </elements>
 </model>

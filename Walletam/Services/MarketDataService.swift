@@ -9,7 +9,6 @@ import Foundation
 import Combine
 
 class MarketDataService {
-    
     @Published var marketData: MarketDataModel? = nil
     
     var marketDataSubscription: AnyCancellable?
@@ -29,5 +28,5 @@ class MarketDataService {
                 self?.marketData = returnedGlobalData.data
                 self?.marketDataSubscription?.cancel()
             })
-                  }
-                  }
+    }
+}

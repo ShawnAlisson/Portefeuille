@@ -45,10 +45,13 @@ struct CardView: View {
                     //Expire Date
                     Text(expDate ?? "")
                 }.padding(.bottom).padding(.leading).padding(.trailing)
-            }.frame(width: UIScreen.main.bounds.width * 0.88 , height: UIScreen.main.bounds.height * 0.26)
+            }
+            .frame(maxWidth: 350, maxHeight: 200)
+            .frame(width: UIScreen.main.bounds.width * 0.88 , height: UIScreen.main.bounds.height * 0.26)
             
         }.padding().background(RoundedRectangle.init(cornerRadius: 15).padding().shadow(radius: 10)
                                 .foregroundColor(cardColorSelector())
+                                .frame(maxWidth: 400, maxHeight: 253.16)
         )
     }
     

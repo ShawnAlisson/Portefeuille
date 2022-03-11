@@ -4,6 +4,7 @@
 //
 //  Created by Shayan Alizadeh on 1/4/22.
 //
+//  In The Name of Bug
 
 import SwiftUI
 
@@ -17,20 +18,17 @@ struct WalletamApp: App {
     var body: some Scene {
         WindowGroup {
             ZStack {
-                //put Home View in Navigation View
+                
+                //NavigationView for HomeView
                 NavigationView {
-                    
                     HomeView()
                         .navigationBarHidden(true)
                         .navigationTitle("")
                 }
                 .environmentObject(vm)
-//                .environment(
-//                  \.managedObjectContext,
-//                   PortfolioDataService.instance.container.viewContext)
                 .navigationViewStyle(StackNavigationViewStyle())
                 
-                //Launch View in start
+                //Launch View on start
                 ZStack {
                     if showLaunchView {
                         LaunchView(showLaunchView: $showLaunchView)
@@ -39,6 +37,7 @@ struct WalletamApp: App {
                 }
                 .zIndex(2.0)
                 
+                //Authentication View on start
                 ZStack {
                     if !authManager.isAuthenticated && vm.authState {
                         LoginView()
@@ -46,7 +45,6 @@ struct WalletamApp: App {
                     }
                 }
             }
-            
         }
     }
 }

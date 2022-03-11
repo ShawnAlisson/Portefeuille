@@ -11,23 +11,15 @@ import Network
 import SwiftUI
 
 class HomeViewModel: ObservableObject {
-    
 
-//
-//    @FetchRequest(
-//        entity: TransEntity.entity(),
-//      sortDescriptors: [
-//        NSSortDescriptor(keyPath: \TransEntity.date, ascending: true)
-//      ]
-//    ) var hello: FetchedResults<TransEntity>
-
-    
     @Published var allCoins: [CoinModel] = []
     @Published var portfolioCoins: [CoinModel] = []
     @Published var statistic: [StatisticModel] = []
     @Published var tethStatsPrice: [StatisticModel] = []
     
     @Published var sortOptions: SortOption = .holding
+    
+    @ObservedObject var monitor = NetworkMonitor()
     
     @AppStorage("currencyChange") var showCurrencyChange: Bool = false
     @AppStorage("authState") var authState: Bool = false
@@ -40,7 +32,6 @@ class HomeViewModel: ObservableObject {
     @Published var irPrice: Double? = nil
     
     @Published var dateAdded: Date = Date.now
-//    @Published var refreshingID = UUID()
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -104,8 +95,8 @@ class HomeViewModel: ObservableObject {
         
     }
     
-    func updatePortfolio(coin: CoinModel, amount: Double, date: Date, note: String) {
-        portfolioDataService.updatePortfolio(coin: coin, amount: amount, date: dateAdded, note: note)
+    func updatePortfolio(coin: CoinModel, amount: Double, buyPrice: Double, date: Date, note: String) {
+        portfolioDataService.updatePortfolio(coin: coin, amount: amount, buyPrice: buyPrice, date: dateAdded, note: note)
     }
     
     func reloadData() {

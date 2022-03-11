@@ -135,7 +135,7 @@ extension Double {
     }
     
     func asEngNumberString() -> String {
-        return String(format: "%.2f", self)
+        return String(format: "%.0f", self)
     }
     
     func asPercentString() -> String {

@@ -9,26 +9,22 @@ import Foundation
 import CoreData
 import SwiftUI
 
-
 class PortfolioDataService {
-
-//    static let instance = PortfolioDataService()
-
+    
     private let container: NSPersistentContainer
     private let containerName: String = "PortContainer"
     private let entityName: String = "PortEntity"
     private let transactionEntityName: String = "TransEntity"
     
-
     @Published var savedEntities: [PortEntity] = []
-//    @Published var transactionEntities: [TransEntity] = []
     @Published var irEntities: [IREntity] = []
     @Published var bankEntities: [BankEntity] = []
-    @Published var goldEntities: [GoldEntity] = []
-
+    
+    //Future UPDATE
+    //    @Published var goldEntities: [GoldEntity] = []
+    
     init() {
         container = NSPersistentContainer(name: containerName)
-//        container.viewContext.automaticallyMergesChangesFromParent = true
         container.loadPersistentStores { (_, error) in
             if let error = error {
                 print("⚠️Error loading Core Data! \(error.localizedDescription)")
@@ -36,29 +32,11 @@ class PortfolioDataService {
             self.getPortfolio()
         }
     }
-
-    // MARK: PUBLIC
-
-    func updatePortfolio(coin: CoinModel, amount: Double, date: Date, note: String) {
-        // check if coin is already in portfolio
-        if let entity = savedEntities.first(where: { $0.coinID == coin.id }) {
-            update(entity: entity, amount: amount, date: date, note: note)
-        } else {
-            add(coin: coin, amount: amount, date: date, note: note)
-        }
-    }
-
-    // MARK: PRIVATE
-
+    
+    // MARK: GENERAL
+    
+    //Fetching Data
     func getPortfolio() {
-//        let request2 = NSFetchRequest<TransEntity>(entityName: transactionEntityName)
-//        let sorter = NSSortDescriptor(key: "date", ascending: false)
-//        request2.sortDescriptors = [sorter]
-//        do {
-//            transactionEntities = try container.viewContext.fetch(request2)
-//        } catch let error {
-//            print("⚠️Error fetching Portfolio Entities. \(error)")
-//        }
         
         let request = NSFetchRequest<PortEntity>(entityName: entityName)
         do {
@@ -74,13 +52,6 @@ class PortfolioDataService {
             print("⚠️Error fetching Bank Entities. \(error.localizedDescription)")
         }
         
-        let goldRequest = NSFetchRequest<GoldEntity>(entityName: "GoldEntity")
-        do {
-            goldEntities = try container.viewContext.fetch(goldRequest)
-        } catch let error {
-            print("⚠️Error fetching Gold Entities. \(error.localizedDescription)")
-        }
-        
         let IRRequest = NSFetchRequest<IREntity>(entityName: "IREntity")
         let sort = NSSortDescriptor(key: "date", ascending: false)
         IRRequest.sortDescriptors = [sort]
@@ -90,7 +61,88 @@ class PortfolioDataService {
             print("⚠️Error fetching Toman Entities. \(error.localizedDescription)")
         }
         
+        //Future UPDATE
+        //        let goldRequest = NSFetchRequest<GoldEntity>(entityName: "GoldEntity")
+        //        do {
+        //            goldEntities = try container.viewContext.fetch(goldRequest)
+        //        } catch let error {
+        //            print("⚠️Error fetching Gold Entities. \(error.localizedDescription)")
+        //        }
+        
     }
+    
+    func save() {
+        if container.viewContext.hasChanges {
+            do {
+                try container.viewContext.save()
+            } catch let error {
+                print("⚠️Error saving to Core Data. \(error.localizedDescription)")
+            }
+        }
+        
+    }
+    
+    func applyChanges() {
+        save()
+        self.container.viewContext.refreshAllObjects()
+        getPortfolio()
+    }
+    
+    // MARK: CRYPTO
+    
+    func updatePortfolio(coin: CoinModel, amount: Double, buyPrice: Double, date: Date, note: String) {
+        // check if coin is already in portfolio
+        if let entity = savedEntities.first(where: { $0.coinID == coin.id }) {
+            update(entity: entity, amount: amount, buyPrice: buyPrice, date: date, note: note)
+        } else {
+            add(coin: coin, amount: amount, buyPrice: buyPrice, date: date, note: note)
+        }
+    }
+    
+    private func add(coin: CoinModel, amount: Double, buyPrice: Double, date: Date, note: String) {
+        let transEntity = TransEntity(context: container.viewContext)
+        let entity = PortEntity(context: container.viewContext)
+        entity.coinID = coin.id
+        
+        transEntity.amount = amount
+        transEntity.portfolio = entity
+        transEntity.date = date
+        transEntity.note = note
+        transEntity.buyPrice = buyPrice
+        applyChanges()
+    }
+    
+    private func update(entity: PortEntity, amount: Double, buyPrice: Double, date: Date, note: String) {
+        let newAmount = TransEntity(context: container.viewContext)
+        newAmount.amount = amount
+        newAmount.portfolio = entity
+        newAmount.date = date
+        newAmount.note = note
+        newAmount.buyPrice = buyPrice
+        applyChanges()
+    }
+    
+    func editCrypto(amount: Double, note: String, buyPrice: Double, date: Date, entity: TransEntity) {
+        entity.amount = amount
+        entity.note = note
+        entity.buyPrice = buyPrice
+        entity.date = date
+        applyChanges()
+    }
+    
+    func delete(coin: CoinModel) {
+        if let entity = savedEntities.first(where: { $0.coinID == coin.id }) {
+            container.viewContext.delete(entity)
+            applyChanges()
+        }
+    }
+    
+    func deleteItem(entity: TransEntity, coin: CoinModel) {
+        container.viewContext.delete(entity)
+        applyChanges()
+    }
+    
+    // MARK: TOMAN
     
     func addCustom(amount: Double, date: Date, note: String, bank: String) {
         let entity = IREntity(context: container.viewContext)
@@ -102,15 +154,41 @@ class PortfolioDataService {
         applyChanges()
     }
     
+    func editToman(amount: Double, date: Date, note: String, entity: IREntity) {
+        entity.note = note
+        entity.date = date
+        entity.amount = amount
+        applyChanges()
+    }
+    
+    func deleteIRItem(entity: IREntity) {
+        container.viewContext.delete(entity)
+        applyChanges()
+    }
+
+    
     func addBank(name: String, code: Double, note: String) {
         let entity = BankEntity(context: container.viewContext)
         
         entity.name = name
         entity.code = code
         entity.note = note
-//        entity.color = color
         applyChanges()
     }
+    
+    func editBank(name: String, code: Double, note: String, entity: BankEntity) {
+        entity.name = name
+        entity.code = code
+        entity.note = note
+        applyChanges()
+    }
+    
+    func deleteBankEntity(entity: BankEntity) {
+        container.viewContext.delete(entity)
+        applyChanges()
+    }
+    
+    // MARK: GOLD [FUTURE UPDATE]
     
     func addGold(name: String, amount: Double, note: String, date: Date) {
         let entity = GoldEntity(context: container.viewContext)
@@ -120,74 +198,5 @@ class PortfolioDataService {
         entity.note = note
         entity.date = date
         applyChanges()
-    }
-
-    private func add(coin: CoinModel, amount: Double, date: Date, note: String) {
-        
-        let transEntity = TransEntity(context: container.viewContext)
-        let entity = PortEntity(context: container.viewContext)
-        entity.coinID = coin.id
-        entity.change = false
-        
-        transEntity.amount = amount
-        transEntity.portfolio = entity
-        transEntity.date = date
-        transEntity.note = note
-        applyChanges()
-    }
-
-    private func update(entity: PortEntity, amount: Double, date: Date, note: String) {
-
-        let newAmount = TransEntity(context: container.viewContext)
-        newAmount.amount = amount
-        newAmount.portfolio = entity
-        newAmount.date = date
-        newAmount.note = note
-        applyChanges()
-    }
-
-    func delete(coin: CoinModel) {
-        if let entity = savedEntities.first(where: { $0.coinID == coin.id }) {
-            container.viewContext.delete(entity)
-            applyChanges()
-        }
-    }
-    
-    func deleteItem(entity: TransEntity, coin: CoinModel) {
-
-        container.viewContext.delete(entity)
-        applyChanges()
-        
-    }
-    
-    func deleteIRItem(entity: IREntity) {
-        
-        container.viewContext.delete(entity)
-        applyChanges()
-        
-    }
-    
-    func deleteBankEntity(entity: BankEntity) {
-        
-        container.viewContext.delete(entity)
-        applyChanges()
-        
-    }
-
-    func save() {
-        if container.viewContext.hasChanges {
-            do {
-                try container.viewContext.save()
-            } catch let error {
-                print("⚠️Error saving to Core Data. \(error.localizedDescription)")
-            }
-        }
-        
-    }
-
-    func applyChanges() {
-        save()
-        self.container.viewContext.refreshAllObjects()
-        getPortfolio()
     }
 }

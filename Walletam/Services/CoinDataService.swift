@@ -9,7 +9,6 @@ import Foundation
 import Combine
 
 class CoinDataService {
-    
     @Published var allCoins: [CoinModel] = []
     
     var coinSubscription: AnyCancellable?
@@ -29,5 +28,5 @@ class CoinDataService {
                 self?.allCoins = returnedCoins
                 self?.coinSubscription?.cancel()
             })
-                  }
-                  }
+    }
+}

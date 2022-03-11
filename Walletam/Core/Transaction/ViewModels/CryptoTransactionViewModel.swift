@@ -9,7 +9,7 @@ import Foundation
 import Combine
 import SwiftUI
 
-class TransactionViewModel: ObservableObject {
+class CryptoTransactionViewModel: ObservableObject {
     
      var coin: CoinModel
     
@@ -17,28 +17,11 @@ class TransactionViewModel: ObservableObject {
     
     let portfolioDataService: PortfolioDataService
     @ObservedObject var vm = HomeViewModel()
-//   @Published var entity: PortEntity?
 
     init(coin: CoinModel) {
         self.coin = coin
         self.portfolioDataService = PortfolioDataService()
-//        self.entity = portfolioDataService.savedEntities.first(where: { $0.coinID == coin.id })
         self.vm.transList = portfolioDataService.savedEntities.first(where: { $0.coinID == coin.id })?.transactions?.allObjects as? [TransEntity] ?? []
         self.vm.transList = self.vm.transList.sorted(by: {$0.date! > $1.date!})
-        
     }
-    
-    
-//    private func addSubscribers() {
-//
-//        portfolioDataService.$transactionEntities
-//            .combineLatest($coin)
-//            .sink { [weak self] (returnedCoinDetails) in
-//                self?.transList = returnedCoinDetails
-//            }
-//            .store(in: &cancellables)
-//
-//
-//
-//    }
 }

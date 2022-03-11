@@ -9,7 +9,6 @@ import Foundation
 import SwiftUI
 
 class HapticManager {
-    
     static private let generator = UINotificationFeedbackGenerator()
     
     static func notification(type: UINotificationFeedbackGenerator.FeedbackType) {
@@ -17,11 +16,9 @@ class HapticManager {
     }
     
     static func impact(style: UIImpactFeedbackGenerator.FeedbackStyle) {
-            let generator = UIImpactFeedbackGenerator(style: style)
-            generator.impactOccurred()
-        }
-
-    
+        let generator = UIImpactFeedbackGenerator(style: style)
+        generator.impactOccurred()
+    }
 }
 
 

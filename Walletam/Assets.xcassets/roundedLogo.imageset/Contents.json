@@ -1,19 +1,8 @@
 {
   "images" : [
     {
-      "filename" : "Walletam-Rounded.png",
-      "idiom" : "universal",
-      "scale" : "1x"
-    },
-    {
-      "filename" : "Walletam-Rounded-1.png",
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "filename" : "Walletam-Rounded-2.png",
-      "idiom" : "universal",
-      "scale" : "3x"
+      "filename" : "icon_512x512@2x@2x.png",
+      "idiom" : "universal"
     }
   ],
   "info" : {

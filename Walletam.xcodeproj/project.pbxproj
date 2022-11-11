@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2927B1602908A7B300C4A4A6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2927B1622908A7B300C4A4A6 /* Localizable.strings */; };
 		E40AA08E27BD957B00A23C13 /* CardVerticalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40AA08D27BD957B00A23C13 /* CardVerticalView.swift */; };
 		E413C47B2784E38500549A3A /* WalletamApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E413C47A2784E38500549A3A /* WalletamApp.swift */; };
 		E413C47F2784E38700549A3A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E413C47E2784E38700549A3A /* Assets.xcassets */; };
@@ -49,6 +50,7 @@
 		E4BB11D427930D8700203696 /* TethDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BB11D327930D8700203696 /* TethDataService.swift */; };
 		E4BED2A427A22CDF00B4D7D8 /* SocialLinksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BED2A327A22CDF00B4D7D8 /* SocialLinksView.swift */; };
 		E4CFD0A9279472EE00E2565E /* Modifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CFD0A8279472EE00E2565E /* Modifier.swift */; };
+		E4DC9A8E2810A776001FB1F6 /* BankView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DC9A8D2810A776001FB1F6 /* BankView.swift */; };
 		E4DCDF182788A4C000D7D720 /* ManagePortfolioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DCDF172788A4C000D7D720 /* ManagePortfolioView.swift */; };
 		E4DCDF1C2788B62300D7D720 /* CoinLogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DCDF1B2788B62300D7D720 /* CoinLogoView.swift */; };
 		E4DE4F292785C90900DB4E69 /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4DE4F282785C90900DB4E69 /* Double.swift */; };
@@ -69,8 +71,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2927B1612908A7B300C4A4A6 /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/Localizable.strings; sourceTree = "<group>"; };
+		2927B1632908A83500C4A4A6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		2927B1662908AAEC00C4A4A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		29E0EAAD291F08C0001F13DA /* .gitignore.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = .gitignore.md; sourceTree = "<group>"; };
+		29E0EAAE291F08FD001F13DA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E40AA08D27BD957B00A23C13 /* CardVerticalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardVerticalView.swift; sourceTree = "<group>"; };
-		E413C4772784E38500549A3A /* Walletam.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Walletam.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E413C4772784E38500549A3A /* Portefeuille.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Portefeuille.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E413C47A2784E38500549A3A /* WalletamApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletamApp.swift; sourceTree = "<group>"; };
 		E413C47E2784E38700549A3A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E413C4812784E38700549A3A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -85,6 +92,7 @@
 		E41F452627851B22001C5BED /* CoinRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinRowView.swift; sourceTree = "<group>"; };
 		E41F452827851BAF001C5BED /* PreviewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewProvider.swift; sourceTree = "<group>"; };
 		E428A88127DBEA7A0064B64F /* CloseSheetButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseSheetButtonView.swift; sourceTree = "<group>"; };
+		E428A88327DC0E9C0064B64F /* Walletam.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Walletam.entitlements; sourceTree = "<group>"; };
 		E42C5A8A278E0A6800B73D99 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		E4319BBE27B7D52F005AF6FC /* CharLimit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharLimit.swift; sourceTree = "<group>"; };
 		E43D23F027917EE500897061 /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
@@ -107,12 +115,12 @@
 		E4969F3527B974DB00594293 /* GoldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoldView.swift; sourceTree = "<group>"; };
 		E4A5703A27BD083E0090C5DD /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		E4A6707F2789B3080003609D /* PortfolioDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioDataService.swift; sourceTree = "<group>"; };
-		E4A67086278A30480003609D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E4B2100127936F46002501E5 /* CryptoTransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoTransactionView.swift; sourceTree = "<group>"; };
 		E4BB11D127930D4200203696 /* TethModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TethModel.swift; sourceTree = "<group>"; };
 		E4BB11D327930D8700203696 /* TethDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TethDataService.swift; sourceTree = "<group>"; };
 		E4BED2A327A22CDF00B4D7D8 /* SocialLinksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialLinksView.swift; sourceTree = "<group>"; };
 		E4CFD0A8279472EE00E2565E /* Modifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modifier.swift; sourceTree = "<group>"; };
+		E4DC9A8D2810A776001FB1F6 /* BankView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankView.swift; sourceTree = "<group>"; };
 		E4DCDF172788A4C000D7D720 /* ManagePortfolioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagePortfolioView.swift; sourceTree = "<group>"; };
 		E4DCDF1B2788B62300D7D720 /* CoinLogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinLogoView.swift; sourceTree = "<group>"; };
 		E4DE4F282785C90900DB4E69 /* Double.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
@@ -143,11 +151,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		29E0EAAC291F068F001F13DA /* Future */ = {
+			isa = PBXGroup;
+			children = (
+				E4969F3527B974DB00594293 /* GoldView.swift */,
+				E454BE8A27CECA54008DF7A2 /* BankEditView.swift */,
+			);
+			path = Future;
+			sourceTree = "<group>";
+		};
 		E413C46E2784E38500549A3A = {
 			isa = PBXGroup;
 			children = (
-				E428A88127DBEA7A0064B64F /* CloseSheetButtonView.swift */,
-				E454BE8A27CECA54008DF7A2 /* BankEditView.swift */,
+				29E0EAAE291F08FD001F13DA /* README.md */,
+				29E0EAAD291F08C0001F13DA /* .gitignore.md */,
+				29E0EAAC291F068F001F13DA /* Future */,
+				2927B1622908A7B300C4A4A6 /* Localizable.strings */,
 				E413C4792784E38500549A3A /* Walletam */,
 				E413C4782784E38500549A3A /* Products */,
 			);
@@ -156,7 +175,7 @@
 		E413C4782784E38500549A3A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E413C4772784E38500549A3A /* Walletam.app */,
+				E413C4772784E38500549A3A /* Portefeuille.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -164,6 +183,7 @@
 		E413C4792784E38500549A3A /* Walletam */ = {
 			isa = PBXGroup;
 			children = (
+				E428A88327DC0E9C0064B64F /* Walletam.entitlements */,
 				E413C47A2784E38500549A3A /* WalletamApp.swift */,
 				E4DE4F2F2786600400DB4E69 /* Utilities */,
 				E4DE4F2C278639F400DB4E69 /* Services */,
@@ -171,7 +191,7 @@
 				E413C48F2784F5CA00549A3A /* Core */,
 				E413C48A2784F15E00549A3A /* Extensions */,
 				E413C47E2784E38700549A3A /* Assets.xcassets */,
-				E4A67086278A30480003609D /* Info.plist */,
+				2927B1662908AAEC00C4A4A6 /* Info.plist */,
 				E413C4802784E38700549A3A /* Preview Content */,
 			);
 			path = Walletam;
@@ -239,7 +259,7 @@
 				E41F452627851B22001C5BED /* CoinRowView.swift */,
 				E4E8FABF27886E4F00EF140D /* HomeStatsView.swift */,
 				E4DCDF172788A4C000D7D720 /* ManagePortfolioView.swift */,
-				E4969F3527B974DB00594293 /* GoldView.swift */,
+				E4DC9A8D2810A776001FB1F6 /* BankView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -257,6 +277,7 @@
 		E41F451D2784F793001C5BED /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				E428A88127DBEA7A0064B64F /* CloseSheetButtonView.swift */,
 				E465417227C12C8300DCACE7 /* ChartRawView.swift */,
 				E465416D27C11B6F00DCACE7 /* LoadingDotsAnimationView.swift */,
 				E41DC69927867378003BB807 /* CoinImage */,
@@ -413,9 +434,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E413C4762784E38500549A3A /* Walletam */ = {
+		E413C4762784E38500549A3A /* Portefeuille */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E413C4852784E38700549A3A /* Build configuration list for PBXNativeTarget "Walletam" */;
+			buildConfigurationList = E413C4852784E38700549A3A /* Build configuration list for PBXNativeTarget "Portefeuille" */;
 			buildPhases = (
 				E413C4732784E38500549A3A /* Sources */,
 				E413C4742784E38500549A3A /* Frameworks */,
@@ -425,11 +446,11 @@
 			);
 			dependencies = (
 			);
-			name = Walletam;
+			name = Portefeuille;
 			packageProductDependencies = (
 			);
 			productName = Walletam;
-			productReference = E413C4772784E38500549A3A /* Walletam.app */;
+			productReference = E413C4772784E38500549A3A /* Portefeuille.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -440,7 +461,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1300;
-				LastUpgradeCheck = 1300;
+				LastUpgradeCheck = 1330;
 				TargetAttributes = {
 					E413C4762784E38500549A3A = {
 						CreatedOnToolsVersion = 13.0;
@@ -454,7 +475,7 @@
 			knownRegions = (
 				en,
 				Base,
-				de,
+				fa,
 			);
 			mainGroup = E413C46E2784E38500549A3A;
 			packageReferences = (
@@ -463,7 +484,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E413C4762784E38500549A3A /* Walletam */,
+				E413C4762784E38500549A3A /* Portefeuille */,
 			);
 		};
 /* End PBXProject section */
@@ -474,6 +495,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4E0C9DA278F8EBF006B8427 /* BYekan.ttf in Resources */,
+				2927B1602908A7B300C4A4A6 /* Localizable.strings in Resources */,
 				E4E0C9DC278F9499006B8427 /* Yekan.ttf in Resources */,
 				E413C4822784E38700549A3A /* Preview Assets.xcassets in Resources */,
 				E48770A52792D9060003B3F6 /* LaunchScreen.storyboard in Resources */,
@@ -529,6 +551,7 @@
 				E4E8FAC027886E4F00EF140D /* HomeStatsView.swift in Sources */,
 				E4E4CEA42795F6C700AF53DE /* NetworkMonitor.swift in Sources */,
 				E453C5152788979300E7971D /* MarketDataService.swift in Sources */,
+				E4DC9A8E2810A776001FB1F6 /* BankView.swift in Sources */,
 				E41F452727851B22001C5BED /* CoinRowView.swift in Sources */,
 				E4DE4F292785C90900DB4E69 /* Double.swift in Sources */,
 				E4FD6EF727BBCB4B00791D62 /* PrimaryButton.swift in Sources */,
@@ -547,11 +570,24 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+		2927B1622908A7B300C4A4A6 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2927B1612908A7B300C4A4A6 /* fa */,
+				2927B1632908A83500C4A4A6 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		E413C4832784E38700549A3A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -613,6 +649,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -669,15 +706,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Walletam/Walletam.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 221112;
 				DEVELOPMENT_ASSET_PATHS = "\"Walletam/Preview Content\"";
 				DEVELOPMENT_TEAM = GK5VJ4KG7E;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Walletam/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "";
-				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_CFBundleDisplayName = Portefeuille;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "ورود با تشخیص چهره";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -692,8 +730,11 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.dlox.Walletam;
+				PRODUCT_BUNDLE_IDENTIFIER = com.quyi.portefeuille;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -705,15 +746,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Walletam/Walletam.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 221112;
 				DEVELOPMENT_ASSET_PATHS = "\"Walletam/Preview Content\"";
 				DEVELOPMENT_TEAM = GK5VJ4KG7E;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Walletam/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "";
-				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_CFBundleDisplayName = Portefeuille;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "ورود با تشخیص چهره";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -728,8 +770,11 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.dlox.Walletam;
+				PRODUCT_BUNDLE_IDENTIFIER = com.quyi.portefeuille;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -748,7 +793,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E413C4852784E38700549A3A /* Build configuration list for PBXNativeTarget "Walletam" */ = {
+		E413C4852784E38700549A3A /* Build configuration list for PBXNativeTarget "Portefeuille" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E413C4862784E38700549A3A /* Debug */,

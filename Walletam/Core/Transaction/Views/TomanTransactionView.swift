@@ -33,20 +33,28 @@ struct TomanTransactionView: View {
     
     @State var selectedAccountID: ObjectIdentifier?
     
+    let gradient = LinearGradient(gradient: Gradient(colors: [Color.theme.green, Color.theme.tgBlue]), startPoint: .topLeading, endPoint: .bottomTrailing)
+    
+    
     
     
     var body: some View {
         ZStack {
             List {
-                Section {} header: {cardView}
+                //                MARK: FUTURE
+                //                Section {} header: {cardView}
                 Section {
                     //Filtered Transactions
-                    if showFilteredView {tomanFilteredTransactionView}
+                    //                    if showFilteredView {tomanFilteredTransactionView}
                     //All Transactions
-                    else {tomanAllTransactionView}
+                    //                    else {
+                    tomanAllTransactionView
+                    
+                    //                    }
                 }
             }
-            .environment(\.locale, Locale.init(identifier: "de"))
+            .environment(\.locale, Locale.init(identifier: vm.translateState ? "en" : "ar"))
+            .environment(\.layoutDirection, vm.translateState ? .leftToRight : .rightToLeft)
         }
         .sheet(isPresented: $showTomanDetailView, content: {tomanDetailView})
     }
@@ -55,49 +63,101 @@ struct TomanTransactionView: View {
 //MARK: EXTENSIONS
 extension TomanTransactionView {
     
-    //MARK: VIEWS
+    
+    //MARK: Transacation List
+    private var tomanAllTransactionView: some View {
+        ForEach(vm.portfolioDataService.irEntities) {item in
+            HStack{
+                let amountCount = item.amount
+                Image(systemName: amountCount > 0 ? "chevron.down.circle.fill" : "chevron.up.circle.fill")
+                    .foregroundColor(amountCount > 0 ? Color.theme.green : Color.theme.red)
+                VStack(alignment: .leading) {
+                    HStack(spacing: 5) {
+                        Text("toman_sign")
+                            .font(Font.custom("BYekan+", size: 14))
+                        Text(vm.translateState ? "\(item.amount.asTomanWithTwoDecimalsEng())" : "\(item.amount.asTomanWith2Decimals())")
+                            .font(Font.custom("BYekan+", size: 16))
+                    }
+                    
+                    let newTethPrice = ((vm.tethPrice ?? "") as NSString).doubleValue
+                    let newPrice = item.amount / newTethPrice * 10
+                    
+                    if newPrice.isZero || newPrice.isInfinite {
+                        Text("$ 10")
+                            .redacted(reason: .placeholder)
+                            .opacity(animationAmount)
+                            .animation(Animation
+                                .easeInOut(duration: 1)
+                                .repeatForever(autoreverses: true), value: animationAmount)
+                            .onAppear { animationAmount = 0.8 }
+                    } else {
+                        Text(vm.translateState ? "\(newPrice.asDollarWithTwoDecimalsEng())" : "\(newPrice.asCurrencyWith2Decimals())")
+                            .font(Font.custom("BYekan+", size: 14))
+                            .foregroundColor(Color.theme.SecondaryText)
+                    }
+                }
+                
+                Spacer()
+                VStack(alignment: .trailing) {
+                    
+                    Text(vm.translateState ? "\(item.date?.asShortDateStringENG() ?? "")" : "\(item.date?.asShortDateString() ?? "")")
+                        .font(Font.custom("BYekan+", size: 14))
+                    
+                    Text(vm.translateState ? "\(item.date?.asEnglishTimeString() ?? "")" : "\(item.date?.asPersianTimeString() ?? "")")
+                        .font(Font.custom("BYekan+", size: 10))
+                    
+                }
+            }
+            .background(Color.theme.background.opacity(0.001))
+            .onTapGesture {
+                tranSegue(tran: item)
+            }
+        }
+        .onDelete(perform: remove)
+        
+    }
+    
+    //MARK: Toman Details
     private var tomanDetailView: some View {
         ZStack {
             List {
                 Section {
+                    //MARK: Amount
                     HStack {
                         HStack(spacing: 5) {
+                            Text("amount").font(Font.custom("BYekan+", size: 16))
+                            Spacer()
                             if showEditView {
                                 HStack {
                                     TextField("", text: $amountText)
                                         .focused($amountIsFocused)
                                         .multilineTextAlignment(.leading)
-                                        .font(Font.custom("BYekan", size: 14))
+                                        .font(vm.translateState ? Font.custom("BYekan+", size: 14) : Font.custom("BYekan", size: 14))
                                         .padding(10)
                                         .background(.ultraThinMaterial).cornerRadius(10)
                                         .onTapGesture {
                                             amountIsFocused = true
                                         }
-                                        .onAppear { self.amountText = selectedTran?.amount.asEngNumberString() ?? "" }
+                                        .onAppear { self.amountText = selectedTran?.amount.asCryptoUnlimitedDecimalEng() ?? "" }
                                 }
                                 
                             } else {
-                                Text("تومان")
+                                Text("toman_sign")
                                     .font(Font.custom("BYekan+", size: 14))
-                                Text("\(selectedTran?.amount.asTomanWith2Decimals() ?? "-")").font(Font.custom("BYekan+", size: 14))
+                                Text(vm.translateState ? "\(selectedTran?.amount.asTomanWithTwoDecimalsEng() ?? "-")" : "\(selectedTran?.amount.asTomanWith2Decimals() ?? "-")").font(Font.custom("BYekan+", size: 14))
                             }
-                            
-                            
                         }
-                        Spacer()
-                        Text("مقدار:").font(Font.custom("BYekan+", size: 16))
                     }
                     .padding(.horizontal)
                     
                     if showEditView {
+                        //MARK: Time and Date
                         HStack {
                             HStack {
-                                DatePicker(selection: $vm.dateAdded , label: { Text("تاریخ و ساعت:")})
+                                DatePicker(selection: $vm.dateAdded , label: { Text("time_date")})
                                     .font(Font.custom("BYekan+", size: 16))
                                     .datePickerStyle(.compact)
-                                    .environment(\.locale, Locale.init(identifier: "fa_IR"))
-                                    .environment(\.calendar,Calendar(identifier: .persian))
-                                    .environment(\.layoutDirection, .rightToLeft)
+                                    .environment(\.calendar,Calendar(identifier: vm.translateState ? .gregorian : .persian))
                                     .padding(.horizontal)
                             }
                             .onAppear { self.vm.dateAdded = selectedTran?.date ?? Date.now }
@@ -105,41 +165,45 @@ extension TomanTransactionView {
                     } else {
                         
                         HStack{
-                            Text("\(selectedTran?.date?.asShortDateString() ?? "")").font(Font.custom("BYekan+", size: 14))
+                            Text("date").font(Font.custom("BYekan+", size: 16))
                             Spacer()
-                            Text("تاریخ:").font(Font.custom("BYekan+", size: 16))
+                            Text(vm.translateState ? "\(selectedTran?.date?.asShortDateStringENG() ?? "")" : "\(selectedTran?.date?.asShortDateString() ?? "")").font(Font.custom("BYekan+", size: 14))
+                            
                         }
                         .padding(.horizontal)
                         
                         HStack{
-                            Text("\(selectedTran?.date?.asPersianTimeString() ?? "")").font(Font.custom("BYekan+", size: 14))
+                            
+                            Text("time").font(Font.custom("BYekan+", size: 16))
                             Spacer()
-                            Text("ساعت:").font(Font.custom("BYekan+", size: 16))
+                            Text(vm.translateState ? "\(selectedTran?.date?.asEnglishTimeString() ?? "")" : "\(selectedTran?.date?.asPersianTimeString() ?? "")").font(Font.custom("BYekan+", size: 14))
+                            
                         }
                         .padding(.horizontal)
                     }
                     
+                    //MARK: FUTURE
+                    //                    HStack{
+                    //                        Text("\(selectedTran?.bank?.name ?? "")").font(Font.custom("BYekan+", size: 14))
+                    //                        Spacer()
+                    //                        Text("حساب:").font(Font.custom("BYekan+", size: 16))
+                    //                    }
+                    //                    .padding(.horizontal)
+                    //
+                    //                    HStack{
+                    //                        Text("\(selectedTran?.bank?.code.asCreaditCardString() ?? "")").font(Font.custom("BYekan+", size: 14))
+                    //                        Spacer()
+                    //                        Text("شماره کارت:").font(Font.custom("BYekan+", size: 16))
+                    //                    }
+                    //                    .padding(.horizontal)
                     
-                    HStack{
-                        Text("\(selectedTran?.bank?.name ?? "")").font(Font.custom("BYekan+", size: 14))
-                        Spacer()
-                        Text("حساب:").font(Font.custom("BYekan+", size: 16))
-                    }
-                    .padding(.horizontal)
                     
-                    HStack{
-                        Text("\(selectedTran?.bank?.code.asCreaditCardString() ?? "")").font(Font.custom("BYekan+", size: 14))
-                        Spacer()
-                        Text("شماره کارت:").font(Font.custom("BYekan+", size: 16))
-                    }
-                    .padding(.horizontal)
-                    
-                    
-                    
-                    VStack(alignment: .trailing) {
+                    //MARK: NOTE
+                    VStack(alignment: .leading) {
                         HStack{
+                            
+                            Text("note").font(Font.custom("BYekan+", size: 16))
                             Spacer()
-                            Text("یادداشت:").font(Font.custom("BYekan+", size: 16))
                         }
                         if showEditView {
                             HStack {
@@ -162,159 +226,125 @@ extension TomanTransactionView {
                         
                     }
                     .padding(.horizontal)
-                } header: {
                     
-                    Image(systemName: showEditView ? "checkmark" : "pencil")
-                        .font(.title)
-                        .padding()
-                        .onTapGesture {
-                            if showEditView {
+                    //MARK: Submit Button
+                } footer: {
+                    VStack{
+                        Spacer()
+                        HStack{
+                            Spacer()
+                            Button(action:  {if showEditView {
                                 vm.portfolioDataService.editToman(amount: Double(amountText) ?? 0, date: vm.dateAdded, note: noteText, entity: selectedTran!)
                                 showEditView.toggle()
                             } else {
                                 showEditView.toggle()
+                            }}) {
+                                Text(showEditView ? "submit" : "edit")
+                                    .padding()
                             }
-                            
-                        }
-                }
-                
-            }
+                            .font(Font.custom("BYekan+", size: 16))
+                            .frame(width: 200, height: 50)
+                            .background(Capsule().stroke(gradient, lineWidth: 2))
+                            .background(Color.theme.background.opacity(0.001)).onTapGesture {
+                                if showEditView {
+                                    vm.portfolioDataService.editToman(amount: Double(amountText) ?? 0, date: vm.dateAdded, note: noteText, entity: selectedTran!)
+                                    showEditView.toggle()
+                                } else {
+                                    showEditView.toggle()
+                                }
+                            }
+                            Spacer()
+                        }.padding()
                         
+                    }
+                }
+            }
+            .environment(\.layoutDirection, vm.translateState ? .leftToRight : .rightToLeft)
             CloseSheetButtonView(sheetToggle: $showTomanDetailView)
             
         }
     }
     
-    private var tomanFilteredTransactionView: some View {
-        ForEach(vm.portfolioDataService.irEntities.filter({ $0.bank?.name == selectedAccount })) {item in
-            HStack{
-                let amountCount = item.amount
-                Image(systemName: amountCount > 0 ? "chevron.down.circle.fill" : "chevron.up.circle.fill")
-                    .foregroundColor(amountCount > 0 ? Color.theme.green : Color.theme.red)
-                VStack(alignment: .leading) {
-                    HStack(spacing: 5) {
-                        Text("تومان")
-                            .font(Font.custom("BYekan+", size: 14))
-                        Text("\(item.amount.asTomanWith2Decimals())")
-                            .font(Font.custom("BYekan+", size: 16))
-                    }
-                    
-                    let newTethPrice = ((vm.tethPrice ?? "") as NSString).doubleValue
-                    let newPrice = item.amount / newTethPrice
-                    
-                    if newPrice.isZero || newPrice.isInfinite {
-                        Text("$ 10")
-                            .redacted(reason: .placeholder)
-                            .opacity(animationAmount)
-                            .animation(Animation
-                                        .easeInOut(duration: 1)
-                                        .repeatForever(autoreverses: true), value: animationAmount)
-                            .onAppear { animationAmount = 0.8 }
-                    } else {
-                        Text("\(newPrice.asCurrencyWith2Decimals())")
-                            .font(Font.custom("BYekan+", size: 14))
-                            .foregroundColor(Color.theme.SecondaryText)
-                    }
-                }
-                
-                Spacer()
-                
-                VStack(alignment: .trailing) {
-                    
-                    Text("\(item.date?.asShortDateString() ?? "")")
-                        .font(Font.custom("BYekan+", size: 14))
-                    
-                    Text("\(item.date?.asPersianTimeString() ?? "")")
-                        .font(Font.custom("BYekan+", size: 10))
-                    
-                }
-            }
-            .background(Color.theme.background.opacity(0.001))
-            .onTapGesture {
-                tranSegue(tran: item)
-            }
-        }
-    }
+    //MARK: FUTURE
+    //    private var tomanFilteredTransactionView: some View {
+    //        ForEach(vm.portfolioDataService.irEntities.filter({ $0.bank?.name == selectedAccount })) {item in
+    //            HStack{
+    //                let amountCount = item.amount
+    //                Image(systemName: amountCount > 0 ? "chevron.down.circle.fill" : "chevron.up.circle.fill")
+    //                    .foregroundColor(amountCount > 0 ? Color.theme.green : Color.theme.red)
+    //                VStack(alignment: .leading) {
+    //                    HStack(spacing: 5) {
+    //                        Text("toman_sign")
+    //                            .font(Font.custom("BYekan+", size: 14))
+    //                        Text("\(item.amount.asTomanWith2Decimals())")
+    //                            .font(Font.custom("BYekan+", size: 16))
+    //                    }
+    //
+    //                    let newTethPrice = ((vm.tethPrice ?? "") as NSString).doubleValue
+    //                    let newPrice = item.amount / newTethPrice
+    //
+    //                    if newPrice.isZero || newPrice.isInfinite {
+    //                        Text("$ 10")
+    //                            .redacted(reason: .placeholder)
+    //                            .opacity(animationAmount)
+    //                            .animation(Animation
+    //                                        .easeInOut(duration: 1)
+    //                                        .repeatForever(autoreverses: true), value: animationAmount)
+    //                            .onAppear { animationAmount = 0.8 }
+    //                    } else {
+    //                        Text("\(newPrice.asCurrencyWith2Decimals())")
+    //                            .font(Font.custom("BYekan+", size: 14))
+    //                            .foregroundColor(Color.theme.SecondaryText)
+    //                    }
+    //                }
+    //
+    //                Spacer()
+    //
+    //                VStack(alignment: .trailing) {
+    //
+    //                    Text(vm.translateState ? "\(item.date?.asShortDateStringENG() ?? "")" : "\(item.date?.asShortDateString() ?? "")")
+    //                        .font(Font.custom("BYekan+", size: 14))
+    //
+    //                    Text(vm.translateState ? "\(item.date?.asEnglishTimeString() ?? "")" : "\(item.date?.asPersianTimeString() ?? "")")
+    //                        .font(Font.custom("BYekan+", size: 10))
+    //
+    //                }
+    //            }
+    //            .background(Color.theme.background.opacity(0.001))
+    //            .onTapGesture {
+    //                tranSegue(tran: item)
+    //            }
+    //        }
+    //    }
     
-    private var tomanAllTransactionView: some View {
-        ForEach(vm.portfolioDataService.irEntities) {item in
-            HStack{
-                let amountCount = item.amount
-                Image(systemName: amountCount > 0 ? "chevron.down.circle.fill" : "chevron.up.circle.fill")
-                    .foregroundColor(amountCount > 0 ? Color.theme.green : Color.theme.red)
-                VStack(alignment: .leading) {
-                    HStack(spacing: 5) {
-                        Text("تومان")
-                            .font(Font.custom("BYekan+", size: 14))
-                        Text("\(item.amount.asTomanWith2Decimals())")
-                            .font(Font.custom("BYekan+", size: 16))
-                    }
-                    
-                    let newTethPrice = ((vm.tethPrice ?? "") as NSString).doubleValue
-                    let newPrice = item.amount / newTethPrice
-                    
-                    if newPrice.isZero || newPrice.isInfinite {
-                        Text("$ 10")
-                            .redacted(reason: .placeholder)
-                            .opacity(animationAmount)
-                            .animation(Animation
-                                        .easeInOut(duration: 1)
-                                        .repeatForever(autoreverses: true), value: animationAmount)
-                            .onAppear { animationAmount = 0.8 }
-                    } else {
-                        Text("\(newPrice.asCurrencyWith2Decimals())")
-                            .font(Font.custom("BYekan+", size: 14))
-                            .foregroundColor(Color.theme.SecondaryText)
-                    }
-                }
-                
-                Spacer()
-                VStack(alignment: .trailing) {
-                    
-                    Text("\(item.date?.asShortDateString() ?? "")")
-                        .font(Font.custom("BYekan+", size: 14))
-                    
-                    Text("\(item.date?.asPersianTimeString() ?? "")")
-                        .font(Font.custom("BYekan+", size: 10))
-                    
-                }
-            }
-            .background(Color.theme.background.opacity(0.001))
-            .onTapGesture {
-                tranSegue(tran: item)
-            }
-        }
-        .onDelete(perform: remove)
-        
-    }
     
-    private var cardView: some View {
-        VStack {
-            ScrollView(.horizontal, showsIndicators: false){
-                HStack(spacing: -15) {
-                    ForEach(vm.portfolioDataService.bankEntities, id: \.self) {item in
-                        
-                        CardView(code: item.code, name: item.name)
-                            .opacity(item.id == selectedAccountID && showFilteredView ? 1 : 0.7)
-                            .onTapGesture {
-                                
-                                withAnimation(.easeIn) {
-                                    if item.id ==  selectedAccountID {
-                                        showFilteredView.toggle()
-                                    } else {
-                                        showFilteredView = true
-                                    }
-                                    
-                                    selectedAccount = item.name ?? ""
-                                    selectedAccountID = item.id
-                                }
-                            }
-                    }
-                }.foregroundColor(Color.theme.bwColor)
-            }
-        }
-//        .frame(width:UIScreen.main.bounds.width)
-    }
+    
+    //    private var cardView: some View {
+    //        VStack {
+    //            ScrollView(.horizontal, showsIndicators: false){
+    //                HStack(spacing: -15) {
+    //                    ForEach(vm.portfolioDataService.bankEntities, id: \.self) {item in
+    //
+    //                        CardView(code: item.code, name: item.name)
+    //                            .opacity(item.id == selectedAccountID && showFilteredView ? 1 : 0.7)
+    //                            .onTapGesture {
+    //
+    //                                withAnimation(.easeIn) {
+    //                                    if item.id ==  selectedAccountID {
+    //                                        showFilteredView.toggle()
+    //                                    } else {
+    //                                        showFilteredView = true
+    //                                    }
+    //
+    //                                    selectedAccount = item.name ?? ""
+    //                                    selectedAccountID = item.id
+    //                                }
+    //                            }
+    //                    }
+    //                }.foregroundColor(Color.theme.bwColor)
+    //            }
+    //        }
+    //    }
     
     //MARK: FUNCTIONS
     //onDelete Function
@@ -331,6 +361,7 @@ extension TomanTransactionView {
         showTomanDetailView.toggle()
     }
 }
+
 
 
 //MARK: PREVIEW

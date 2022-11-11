@@ -33,11 +33,38 @@ extension Double {
         return formatter
     }
     
+    private var  dollarFormatterTwoEng: NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.usesGroupingSeparator = true
+        formatter.numberStyle = .currency
+        formatter.locale = Locale(identifier: "en_US")
+      //  formatter.currencyCode = "usd"
+       formatter.currencySymbol = "$"
+        formatter
+            .minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 2
+        return formatter
+    }
+    
     private var  tomanFormatter2: NumberFormatter {
         let formatter = NumberFormatter()
         formatter.usesGroupingSeparator = true
         formatter.numberStyle = .currency
         formatter.locale = Locale(identifier: "fa_IR")
+      //  formatter.currencyCode = "usd"
+       formatter.currencySymbol = ""
+        formatter
+            .minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 2
+        return formatter
+    }
+    
+    private var  tomanFormatterTwoEng: NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.usesGroupingSeparator = true
+        formatter.numberStyle = .currency
+        formatter.locale = Locale(identifier: "en_US")
+//        formatter.locale = Locale(identifier: "fa_IR")
       //  formatter.currencyCode = "usd"
        formatter.currencySymbol = ""
         formatter
@@ -76,12 +103,26 @@ extension Double {
     private var  currencyFormatter6ENG: NumberFormatter {
         let formatter = NumberFormatter()
         formatter.usesGroupingSeparator = false
-        //formatter.numberStyle = .currency
+        formatter.numberStyle = .currency
+       formatter.locale = Locale(identifier: "en_US")
+        formatter.currencySymbol = "$"
+        formatter
+            .minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 6
+        return formatter
+    }
+    
+    
+    
+    private var  currencyFormatter2ENG: NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.usesGroupingSeparator = false
+//        formatter.numberStyle = .currency
        formatter.locale = Locale(identifier: "en_US")
 //        formatter.currencySymbol = "$"
         formatter
             .minimumFractionDigits = 0
-        formatter.maximumFractionDigits = 6
+        formatter.maximumFractionDigits = 2
         return formatter
     }
     
@@ -97,15 +138,39 @@ extension Double {
         return formatter
     }
     
+    private var cryptoEngFormatter: NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.usesGroupingSeparator = false
+        formatter.locale = Locale(identifier: "en_US")
+        //formatter.numberStyle = .currency
+//       formatter.locale = Locale(identifier: "fa_IR")
+        formatter.currencySymbol = ""
+        formatter
+            .minimumFractionDigits = 0
+       formatter.maximumFractionDigits = 10
+        return formatter
+    }
+    
     
     //converts currency to string with 2 decimal places
     func asCurrencyWith2Decimals() -> String {
         let number = NSNumber(value: self)
         return (currencyFormatter2.string(from: number) ?? "")
     }
+    
+    func asDollarWithTwoDecimalsEng() -> String {
+        let number = NSNumber(value: self)
+        return (dollarFormatterTwoEng.string(from: number) ?? "")
+    }
+    
     func asTomanWith2Decimals() -> String {
         let number = NSNumber(value: self)
         return (tomanFormatter2.string(from: number) ?? "")
+    }
+    
+    func asTomanWithTwoDecimalsEng() -> String {
+        let number = NSNumber(value: self)
+        return (tomanFormatterTwoEng.string(from: number) ?? "")
     }
     
     //converts currency to string with 2-6 decimal places
@@ -124,22 +189,42 @@ extension Double {
         return currencyFormatter6ENG.string(from: number) ?? "$0.00"
     }
     
+    func asCurrencyWith2DecimalsENG() -> String {
+        let number = NSNumber(value: self)
+        return currencyFormatter2ENG.string(from: number) ?? "0"
+    }
+    
     func asCryptoUnlimitedDecimal() -> String {
         let number = NSNumber(value: self)
         return cryptoFormatter.string(from: number) ?? ""
     }
+    
+    func asCryptoUnlimitedDecimalEng() -> String {
+        let number = NSNumber(value: self)
+        return cryptoEngFormatter.string(from: number) ?? ""
+    }
+    
+    
     
     
     func asNumberString() -> String {
         return String(format: "%.2f", locale: Locale(identifier: "fa_IR"), self)
     }
     
+    func asNumberStringENG() -> String {
+        return String(format: "%.2f", locale: Locale(identifier: "en_US"), self)
+    }
+    
     func asEngNumberString() -> String {
-        return String(format: "%.0f", self)
+        return String(format: "%.0f", locale: Locale(identifier: "en_US"), self)
     }
     
     func asPercentString() -> String {
         return asNumberString() + "%"
+    }
+    
+    func asPercentStringENG() -> String {
+        return asNumberStringENG() + "%"
     }
     
     func asCreaditCardString() -> String {
@@ -157,6 +242,36 @@ extension Double {
         /// Convert 123456789012 to 123.45Bn
         /// Convert 12345678901234 to 12.34Tr
         /// ```
+    ///
+    
+    func formattedWithAbbreviationsEng() -> String {
+        let num = abs(Double(self))
+        let sign = (self < 0) ? "-" : ""
+
+        switch num {
+        case 1_000_000_000_000...:
+            let formatted = num / 1_000_000_000_000
+            let stringFormatted = formatted.asNumberStringENG()
+            return "\(sign)\(stringFormatted) Tr"
+        case 1_000_000_000...:
+            let formatted = num / 1_000_000_000
+            let stringFormatted = formatted.asNumberStringENG()
+            return "\(sign)\(stringFormatted) Bn"
+        case 1_000_000...:
+            let formatted = num / 1_000_000
+            let stringFormatted = formatted.asNumberStringENG()
+            return "\(sign)\(stringFormatted) M"
+        case 1_000...:
+            let formatted = num / 1_000
+            let stringFormatted = formatted.asNumberStringENG()
+            return "\(sign)\(stringFormatted) K"
+        case 0...:
+            return self.asNumberStringENG()
+
+        default:
+            return "\(sign)\(self)"
+        }
+    }
         func formattedWithAbbreviations() -> String {
             let num = abs(Double(self))
             let sign = (self < 0) ? "-" : ""
@@ -198,6 +313,17 @@ extension Int {
         formatter.locale = Locale(identifier: "fa_IR")
         return formatter
     }
+    
+    private var  intToEngStringFormatter: NumberFormatter {
+        let formatter = NumberFormatter()
+        return formatter
+    }
+    
+    func asIntToEngString() -> String {
+        let number = NSNumber(value: self)
+        return intToEngStringFormatter.string(from: number) ?? "-"
+    }
+    
     
     func engToFaInt() -> String {
         let number = NSNumber(value: self)

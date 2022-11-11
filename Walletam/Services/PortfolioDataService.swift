@@ -20,7 +20,7 @@ class PortfolioDataService {
     @Published var irEntities: [IREntity] = []
     @Published var bankEntities: [BankEntity] = []
     
-    //Future UPDATE
+    //MARK: FUTURE
     //    @Published var goldEntities: [GoldEntity] = []
     
     init() {
@@ -61,7 +61,7 @@ class PortfolioDataService {
             print("⚠️Error fetching Toman Entities. \(error.localizedDescription)")
         }
         
-        //Future UPDATE
+        //MARK: FUTURE
         //        let goldRequest = NSFetchRequest<GoldEntity>(entityName: "GoldEntity")
         //        do {
         //            goldEntities = try container.viewContext.fetch(goldRequest)

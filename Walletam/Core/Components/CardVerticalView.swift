@@ -22,7 +22,9 @@ struct CardVerticalView: View {
                     .font(Font.custom("BYekan+", size: 24)).lineLimit(1).minimumScaleFactor(0.1)
                 Spacer()
                 Text(code.asCreaditCardString()) .font(Font.custom("BYekan+", size: 18)).lineLimit(1).minimumScaleFactor(0.1)
-            }.padding().frame(maxWidth: 200, maxHeight: 350).frame(width: UIScreen.main.bounds.width * 0.6 , height: UIScreen.main.bounds.height * 0.45 ).background(cardColorSelector().frame(maxWidth: 253.16, maxHeight: 400).cornerRadius(15))
+            }.padding().frame(maxWidth: 200, maxHeight: 350)
+//                .frame(width: UIScreen.main.bounds.width * 0.6 , height: UIScreen.main.bounds.height * 0.45 )
+                .background(cardColorSelector().frame(maxWidth: 253.16, maxHeight: 400).cornerRadius(15))
                 
         }
     }

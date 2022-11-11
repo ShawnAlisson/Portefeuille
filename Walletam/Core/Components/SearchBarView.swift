@@ -15,8 +15,8 @@ struct SearchBarView: View {
             
             
             
-            TextField("جستجو", text: $searchField)
-                .multilineTextAlignment(.trailing)
+            TextField("search", text: $searchField)
+                .multilineTextAlignment(.leading)
                 .font(Font.custom("BYekan+", size: 18))
                 //.foregroundColor(Color.theme.accent)
                 .overlay(
@@ -30,7 +30,7 @@ struct SearchBarView: View {
                             searchField = ""
                         }
                         .opacity(searchField.isEmpty ? 0.0 : 1.0)
-                    , alignment: .leading
+                    , alignment: .trailing
                 )
             Image(systemName: "magnifyingglass")
                 .foregroundColor(searchField.isEmpty ?
@@ -40,9 +40,9 @@ struct SearchBarView: View {
         .font(.headline)
         .padding()
         .background(
-        RoundedRectangle(cornerRadius: 15)
-            .fill(Color.theme.background))
-        .shadow(color: Color.theme.shadowColor.opacity(0.2), radius: 10, x: 0, y: 0)
+        RoundedRectangle(cornerRadius: 30)
+            .fill(Color.theme.secondaryBg))
+        .shadow(color: Color.theme.shadowColor.opacity(0.2), radius: 0 , x: 2, y: 2)
     }
 }
 

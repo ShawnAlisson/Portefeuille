@@ -30,9 +30,10 @@ struct SocialLinksView: View {
             if let githubString = githubURL,
                let url = URL(string: githubString) {
                 Link(destination: url) {
-                    Image("github")
+                    Image("github-fill")
                         .resizable()
                         .scaledToFit()
+                        .foregroundColor(Color.theme.bwColor)
                         .frame(width: 31, height: 31)
                 }
             }
@@ -40,7 +41,7 @@ struct SocialLinksView: View {
             if let redditString = redditURL,
                let url = URL(string: redditString) {
                 Link(destination: url) {
-                    Image("reddit")
+                    Image("reddit-fill")
                         .resizable()
                         .scaledToFit()
                         .foregroundColor(Color.theme.bwColor)
@@ -51,7 +52,7 @@ struct SocialLinksView: View {
             if let telegramString = telegramURL,
                let url = URL(string: "https://t.me/\(telegramString)") {
                 Link(destination: url) {
-                    Image(systemName: "paperplane.circle.fill")
+                    Image("telegram-circle-fill")
                         .resizable()
                         .scaledToFit()
                         .foregroundColor(Color.theme.bwColor)
@@ -62,9 +63,10 @@ struct SocialLinksView: View {
                 if let twitterString = twitterURL,
                    let url = URL(string: twitterString) {
                     Link(destination: url) {
-                        Image("twitter")
+                        Image("twitter-circle-fill")
                             .resizable()
                             .scaledToFit()
+                            .foregroundColor(Color.theme.bwColor)
                             .frame(width: 31, height: 31)
                     }
                 }

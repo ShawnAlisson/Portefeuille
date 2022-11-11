@@ -52,10 +52,12 @@ extension HomeStatsView {
                                 .opacity(0)
                                 .padding(.horizontal, 5)
                         }
-                        Text("مجموع دارایی‌ها")
+                        Text("total_assets")
                             .font(Font.custom("BYekan+", size: 18))
                             .foregroundColor(Color.theme.SecondaryText)
+                            
                     }
+                    
                 }
             }
             
@@ -83,35 +85,34 @@ extension HomeStatsView {
                         VStack(alignment: .leading, spacing: 5){
                             HStack{
                                 Image(systemName: "dollarsign.circle.fill").resizable().frame(width: 40, height: 40)
-                                Text("\(vm.totalPortfolioCalc().asTomanWith2Decimals())")
+                                Text(vm.translateState ? "\(vm.totalPortfolioCalc().asDollarWithTwoDecimalsEng())" : "\(vm.totalPortfolioCalc().asTomanWith2Decimals())")
                                     .lineLimit(1)
                                     .minimumScaleFactor(0.1)
                                     .font(Font.custom("BYekan+", size: 50))
                                 
                             }
                             HStack{
-                                Text("تومان")
+                                Text("toman_sign")
                                     .font(Font.custom("BYekan+", size: 15)).foregroundColor(Color.theme.SecondaryText)
                                 
-                                Text("\(vm.totalPortfolioToman().asTomanWith2Decimals())")
+                                Text(vm.translateState ? "\(vm.totalPortfolioToman().asTomanWithTwoDecimalsEng())" : "\(vm.totalPortfolioToman().asTomanWith2Decimals())")
                                     .font(Font.custom("BYekan+", size: 15)).foregroundColor(Color.theme.SecondaryText)
                             }
-                            .environment(\.locale, Locale.init(identifier: "fa_IR"))
                         }
                         Spacer()
                         
                         VStack(alignment: .trailing, spacing: 10) {
                             HStack(spacing: 2) {
                                 if vm.showCurrencyChange {
-                                    Text("تومان")
+                                    Text("toman_sign")
                                         .font(Font.custom("BYekan+", size: 15)).foregroundColor(Color.theme.SecondaryText)
-                                    Text("\(vm.cryptoTotalAsToman().asTomanWith2Decimals())")
+                                    Text(vm.translateState ? "\(vm.cryptoTotalAsToman().asTomanWithTwoDecimalsEng())": "\(vm.cryptoTotalAsToman().asTomanWith2Decimals())")
                                         .lineLimit(1)
                                         .minimumScaleFactor(0.1)
                                         .font(Font.custom("BYekan+", size: 15)).foregroundColor(Color.theme.SecondaryText)
                                     
                                 } else {
-                                    Text("\(vm.cryptoTotalCalc().asCurrencyWith2Decimals())")
+                                    Text(vm.translateState ? "\(vm.cryptoTotalCalc().asDollarWithTwoDecimalsEng())" : "\(vm.cryptoTotalCalc().asCurrencyWith2Decimals())")
                                         .lineLimit(1)
                                         .minimumScaleFactor(0.1)
                                         .font(Font.custom("BYekan+", size: 15)).foregroundColor(Color.theme.SecondaryText)
@@ -125,9 +126,9 @@ extension HomeStatsView {
                                 
                                 if vm.showCurrencyChange {
                                     HStack(spacing: 2) {
-                                        Text("تومان")
+                                        Text("toman_sign")
                                             .font(Font.custom("BYekan+", size: 15)).foregroundColor(Color.theme.SecondaryText)
-                                        Text("\(vm.irPrice?.asTomanWith2Decimals() ?? "")")
+                                        Text(vm.translateState ? "\(vm.irPrice?.asTomanWithTwoDecimalsEng() ?? "")" : "\(vm.irPrice?.asTomanWith2Decimals() ?? "")")
                                             .lineLimit(1)
                                             .minimumScaleFactor(0.1)
                                             .font(Font.custom("BYekan+", size: 15)).foregroundColor(Color.theme.SecondaryText)
@@ -135,7 +136,7 @@ extension HomeStatsView {
                                         
                                     }
                                 } else {
-                                    Text("\(vm.tomanTotalAsDollar().asCurrencyWith2Decimals())")
+                                    Text(vm.translateState ? "\(vm.tomanTotalAsDollar().asDollarWithTwoDecimalsEng())" : "\(vm.tomanTotalAsDollar().asCurrencyWith2Decimals())")
                                         .lineLimit(1)
                                         .minimumScaleFactor(0.1)
                                         .font(Font.custom("BYekan+", size: 15)).foregroundColor(Color.theme.SecondaryText)
@@ -150,7 +151,8 @@ extension HomeStatsView {
             }
         }.padding()
 //            .frame(width:UIScreen.main.bounds.width * 0.95)
-            .background(.ultraThinMaterial).cornerRadius(15).shadow(color: Color.theme.shadowColor.opacity(0.6), radius: 25, x: 0, y: 0)
+            
+            .background(Color.theme.secondaryBg).cornerRadius(15).shadow(color: Color.theme.shadowColor.opacity(0.2), radius: 0, x: 2, y: 2)
 //            .padding()
             .ignoresSafeArea()
     }
@@ -166,13 +168,13 @@ extension HomeStatsView {
                     .frame(width: UIScreen.main.bounds.width / 3 ,height: 70 ,alignment: .center)
                     .padding()
                     .background(RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color.theme.background))
-                    .shadow(color: Color.theme.shadowColor.opacity(0.3), radius: 5, x: 0, y: 0)
+                                    .fill(Color.theme.secondaryBg))
+                    .shadow(color: Color.theme.shadowColor.opacity(0.2), radius: 0, x: 2, y: 2)
                     .padding(5)
                     .ignoresSafeArea()
                 }
             }
-            .environment(\.layoutDirection, .rightToLeft)
+//            .environment(\.layoutDirection, .rightToLeft)
         }
         .frame(width:UIScreen.main.bounds.width * 0.95)
     }

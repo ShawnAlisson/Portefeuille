@@ -19,10 +19,18 @@ class HomeViewModel: ObservableObject {
     
     @Published var sortOptions: SortOption = .holding
     
+    enum SortOption {
+        case rank, rankReversed, holding, holdingReversed, price, priceReversed, percentage, percentageReversed
+    }
+    
     @ObservedObject var monitor = NetworkMonitor()
     
+
+    //MARK: App Storage
     @AppStorage("currencyChange") var showCurrencyChange: Bool = false
     @AppStorage("authState") var authState: Bool = false
+    @AppStorage("translateState") var translateState: Bool = false
+//    @AppStorage("calendarState") var calendarState: Bool = false
     
     
     @Published var tethPrice: String? = nil
@@ -40,9 +48,8 @@ class HomeViewModel: ObservableObject {
     private let tethDataService = TethDataService()
     let portfolioDataService = PortfolioDataService()
     
-     enum SortOption {
-        case rank, rankReversed, holding, holdingReversed, price, priceReversed, percentage, percentageReversed
-    }
+    
+   
     
     init() {
         addSubscriber()
@@ -188,15 +195,13 @@ class HomeViewModel: ObservableObject {
             return stats
         }
         
-        
-        let marketCap = StatisticModel(title: "حجم کل بازار", value: data.marketCap, percentageChange: data.marketCapChangePercentage24HUsd)
-        let volume = StatisticModel(title: "معاملات ۲۴ ساعت", value: data.volume)
-        let btcDom = StatisticModel(title: "سهم بازار بیت‌کوین", value: data.btcDominance)
+        //MARK: Stats Info
+         let marketCap = StatisticModel(title: translateState ? "Total Market Value" : "حجم کلی بازار", value: translateState ? (data.marketCap.formattedWithAbbreviationsEng()) : (data.marketCap.formattedWithAbbreviations()), percentageChange: data.marketCapChangePercentage24HUsd)
+        let volume = StatisticModel(title: translateState ? "24h Trades" : "معاملات ۲۴ ساعت", value: translateState ? (data.volume.formattedWithAbbreviationsEng()) : (data.volume.formattedWithAbbreviations()))
+        let btcDom = StatisticModel(title: translateState ? "BTC Dominance" : "سهم بیت‌کوین" , value: translateState ? (data.btcDominance.asPercentStringENG()) : (data.btcDominance.asPercentString()))
         
         let newTethPrice = ((tethPrice ?? "") as NSString).doubleValue
-        let tethStatsPrice = StatisticModel(title: "قیمت تتر به تومان", value: (newTethPrice / 10).asTomanWith2Decimals())
-        
-        
+         let tethStatsPrice = StatisticModel(title: translateState ? "USDT Price" : "قیمت دلار", value: translateState ? ((newTethPrice / 10).asCurrencyWith2DecimalsENG()):((newTethPrice / 10).asTomanWith2Decimals()))
         
         let portfolioCryptoValue =
             portfolioCoins
@@ -226,11 +231,11 @@ class HomeViewModel: ObservableObject {
             newPercentageChange = percentageChange
         }
 
-        let portfolio = StatisticModel(title: "دارایی به دلار", value: portfolioValue.asCurrencyWith2Decimals(),
+         let portfolio = StatisticModel(title: translateState ? "Assets in Dollar" : "دارایی به دلار", value: translateState ? (portfolioValue.asCurrencyWith2DecimalsENG()):(portfolioValue.asCurrencyWith2Decimals()),
                                        percentageChange: newPercentageChange)
         
-
-        let irPortfolio =  StatisticModel(title: "دارایی به تومان", value: (portfolioValue * newTethPrice / 10).asTomanWith2Decimals())
+         let irPortfolio =  StatisticModel(title: translateState ? "Assets in TMN" : "دارایی به تومان", value: translateState ? ((portfolioValue * newTethPrice / 10).asCurrencyWith2DecimalsENG()):((portfolioValue * newTethPrice / 10).asTomanWith2Decimals()))
+        
         
         
         stats.append(contentsOf: [

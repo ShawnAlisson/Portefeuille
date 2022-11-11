@@ -10,9 +10,7 @@ import SwiftUI
 struct LaunchView: View {
     
     @State private var animationAmount = 1.0
-    
     @Binding var showLaunchView: Bool
-    
     
     var body: some View {
         ZStack {
@@ -20,40 +18,14 @@ struct LaunchView: View {
                 .ignoresSafeArea()
             Image("roundedLogo")
                 .resizable()
-                .frame(width: 150, height: 150)
+                .frame(width: 85, height: 85)
             
-            VStack {
-                Spacer()
-                HStack(spacing: 25) {
-                            Circle()
-                        .fill(Color.theme.accent)
-                                .frame(width: 16, height: 12)
-                                .scaleEffect(animationAmount)
-                                .animation(Animation.easeInOut(duration: 0.5).repeatForever(), value: animationAmount)
-                            Circle()
-                                .fill(Color.theme.accent)
-                                .frame(width: 16, height: 12)
-                                .scaleEffect(animationAmount)
-                                .animation(Animation.easeInOut(duration: 0.5).repeatForever().delay(0.3), value: animationAmount)
-                            Circle()
-                                .fill(Color.theme.accent)
-                                .frame(width: 16, height: 12)
-                                .scaleEffect(animationAmount)
-                                .animation(Animation.easeInOut(duration: 0.5).repeatForever().delay(0.6), value: animationAmount)
-                        }
-                        .padding(50)
-                        .onAppear {
-                            animationAmount = 2
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                showLaunchView = false
-                            }
-                    }
-            }
+            LoadingDotsAnimationView(animationAmount: animationAmount, showLaunchView: $showLaunchView)
         }
     }
 }
 
-    
+//MARK: PREVIEW
 struct LaunchView_Previews: PreviewProvider {
     static var previews: some View {
         LaunchView(showLaunchView: .constant(true))

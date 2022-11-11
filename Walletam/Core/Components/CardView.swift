@@ -46,8 +46,10 @@ struct CardView: View {
                     Text(expDate ?? "")
                 }.padding(.bottom).padding(.leading).padding(.trailing)
             }
+            .padding()
             .frame(maxWidth: 350, maxHeight: 200)
-            .frame(width: UIScreen.main.bounds.width * 0.88 , height: UIScreen.main.bounds.height * 0.26)
+            
+//            .frame(width: UIScreen.main.bounds.width * 0.88 , height: UIScreen.main.bounds.height * 0.26)
             
         }.padding().background(RoundedRectangle.init(cornerRadius: 15).padding().shadow(radius: 10)
                                 .foregroundColor(cardColorSelector())

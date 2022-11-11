@@ -25,6 +25,16 @@ extension Date {
         return formatter
     }
     
+    private var shortFormatterENG: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.locale = Locale(identifier: "en_US")
+        return formatter
+    }
+    
+   
+    
     private var persianTimeFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.timeStyle = .short
@@ -35,12 +45,32 @@ extension Date {
 //        formatted(date: .omitted, time: .shortened)
     }
     
+    private var englishTimeFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        formatter.dateStyle = .none
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.locale = Locale(identifier: "en_US")
+        return formatter
+//        formatted(date: .omitted, time: .shortened)
+    }
+    
     func asPersianTimeString() -> String {
         return persianTimeFormatter.string(from: self)
     }
     
+    
+    func asEnglishTimeString() -> String {
+        return englishTimeFormatter.string(from: self)
+    }
+    
+    
     func asShortDateString() -> String {
         return shortFormatter.string(from: self)
+    }
+    
+    func asShortDateStringENG() -> String {
+        return shortFormatterENG.string(from: self)
     }
     
 }

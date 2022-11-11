@@ -16,6 +16,7 @@ struct ChartRawView: View {
      let startingDate: Date
      let endingDate: Date
     @State var percentage: CGFloat = 0
+    @ObservedObject var vm = HomeViewModel()
     
     var body: some View {
         VStack{
@@ -79,19 +80,19 @@ extension ChartRawView {
     
     private var chartYAxis: some View {
         VStack {
-            Text(maxY.formattedWithAbbreviations())
+            Text(vm.translateState ? maxY.formattedWithAbbreviationsEng() : maxY.formattedWithAbbreviations())
             Spacer()
-            Text(((maxY + minY) / 2).formattedWithAbbreviations())
+            Text(vm.translateState ? ((maxY + minY) / 2).formattedWithAbbreviationsEng() : ((maxY + minY) / 2).formattedWithAbbreviations())
             Spacer()
-            Text(minY.formattedWithAbbreviations())
+            Text(vm.translateState ? minY.formattedWithAbbreviationsEng() : minY.formattedWithAbbreviations())
         }
     }
     
     private var chartXAxis: some View {
         HStack {
-            Text("\(startingDate.asShortDateString())")
+            Text(vm.translateState ? "\(startingDate.asShortDateStringENG())" : "\(startingDate.asShortDateString())")
             Spacer()
-            Text("\(endingDate.asShortDateString())")
+            Text(vm.translateState ? "\(endingDate.asShortDateStringENG())" : "\(endingDate.asShortDateString())")
         }
     }
 }

@@ -1,0 +1,69 @@
+/* 
+  Localizable.strings
+  Walletam
+
+  Created by Shayan Alizadeh on 10/26/22.
+  
+*/
+
+"intro_text" = "Click on + to start Managing your Portefeuille!";
+"close" = "Close";
+"crypto" = "Crypto";
+"toman" = "Fiat";
+"dollar" = "Dollar";
+"toman_sign" = "Toman";
+"deposit" = "Deposit";
+"buy" = "Buy";
+"sell" = "Sell";
+"withdraw" = "Withdraw";
+"date" = "Date";
+"amount" = "Amount";
+"current_price" = "Current Price";
+"buy_price" = "Buy Price";
+"sell_price" = "Sell Price";
+"note" = "Note";
+"current_value" = "Current Value";
+"current_value" = "Current Value";
+"buy_value" = "Buy Value";
+"sell_value" = "Sell Value";
+"more" = "More";
+"account" = "Account";
+"account_manage" = "Account Management";
+"time" = "Time";
+"time_date" = "Time and Date";
+"active" = "Active";
+"deactive" = "Deactive";
+"login_with_faceid" = "Login with Face ID";
+"login_with_touchid" = "Login with Touch ID";
+"login_with_password" = "Login with Password";
+"currency_view" = "Currency View";
+"made_with_love" = "Made with 💜";
+"search" = "Search";
+"language" = "Language";
+"persian" = "Persian";
+"english" = "English";
+"holding" = "Holding";
+"total_assets" = "Total Assets";
+"total_market_value" = "Total Market Value";
+"24h_trades" = "24h Trades";
+"btc_dominance" = "BTC Dominance";
+"ustd_tmn" = "USDT/TMN";
+"assets_in_dollar" = "Assets in Dollar";
+"assets_in_tmn" = "Assets in TMN";
+"shamsi" = "Persian";
+"gregorian" = "Gregorian";
+"calendar" = "Calendar";
+"24h_changes" = "24h Changes";
+"market_volume" = "Market Volume";
+"rank" = "Rank";
+"highest_price" = "Highest Price";
+"lowest_price" = "Lowest Price";
+"price_changes" = "Price Changes";
+"market_volume_changes" = "Market Volume Changes";
+"block_build_time" = "Block Build Time";
+"hash_algo" = "Hash Algo";
+"created_at" = "Created at";
+"price" = "Price";
+"edit" = "Edit";
+"submit" = "Submit";
+

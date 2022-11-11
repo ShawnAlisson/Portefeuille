@@ -70,20 +70,23 @@ struct CryptoDetailView: View {
 //MARK: EXTENSIONS
 extension CryptoDetailView {
     
-    //MARK: VIEWS
+    //MARK: Overview
     private var overviewTitle: some View {
         CoinImageView(coin: vm.coin)
             .frame(width: 60, height: 60, alignment: .center)
             .shadow(color: Color.theme.shadowColor.opacity(0.4), radius: 5, x: 0, y: 0)
     }
     
+    //MARK: 24h
     private var changeIn24hTitle: some View {
-        Text("تغییرات ۲۴ ساعت اخیر")
+        Text("24h_changes")
             .font(Font.custom("BYekan+", size: 18))
             .foregroundColor(Color.accentColor)
             .frame(maxWidth: .infinity, alignment: .center)
+        
     }
     
+    //MARK: Overview Gride
     private var overviewGride: some View {
         LazyVGrid(columns: twoColumns,
                   alignment: .center,
@@ -98,8 +101,10 @@ extension CryptoDetailView {
                     .ultraThinMaterial).cornerRadius(15)
                     .shadow(color: Color.theme.shadowColor.opacity(0.2), radius: 10, x: 0, y: 0)
                     .padding()
+        
     }
     
+    //MARK: 24h Gride
     private var changeIn24hGride: some View {
         LazyVGrid(columns: twoColumns,
                   alignment: .center,
@@ -116,6 +121,7 @@ extension CryptoDetailView {
                     .padding()
     }
     
+    //MARK: Additional Gride
     private var additionalGride: some View {
         LazyVGrid(columns: threeColumns,
                   alignment: .center,
@@ -127,6 +133,7 @@ extension CryptoDetailView {
         }
     }
     
+    //MARK: Social Links
     private var socialLinks: some View {
         SocialLinksView(websiteURL: vm.websiteURL, githubURL: vm.githubURL, redditURL: vm.redditURL, telegramURL: vm.telegramURL, twitterURL: nil)
     }
@@ -137,7 +144,9 @@ struct CryptoDetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             CryptoDetailView(coin: dev.coin)
+                
         }
+        
         //.preferredColorScheme(.dark)
     }
 }

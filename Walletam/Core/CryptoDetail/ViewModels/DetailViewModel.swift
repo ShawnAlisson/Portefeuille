@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 class DetailViewModel: ObservableObject {
     
@@ -20,8 +21,11 @@ class DetailViewModel: ObservableObject {
    
     @Published var coin: CoinModel
     
+    @ObservedObject var vm = HomeViewModel()
+    
     private let coinDetailService: CoinDetailDataService
     private var cancellables = Set<AnyCancellable>()
+   
     
     init(coin: CoinModel) {
         self.coin = coin
@@ -54,54 +58,58 @@ class DetailViewModel: ObservableObject {
     }
     
     private func mapDataToStatistic(coinDetailModel: CoinDetailModel?, coinModel: CoinModel) -> (overview: [StatisticModel], additional: [StatisticModel], changeIn24h: [StatisticModel]) {
-        // overview
-        let price = coinModel.currentPrice.asCurrencyWith6Decimals()
-        let pricePerChange = coinModel.priceChangePercentage24H
-        let priceStats = StatisticModel(title: "قیمت", value: price, percentageChange: pricePerChange)
         
-        let marketCap = coinModel.marketCap?.formattedWithAbbreviations() ?? ""
+        //MARK: Overview Infos
+        let price = (vm.translateState ? (coinModel.currentPrice.asCurrencyWith6DecimalsENG()) : (coinModel.currentPrice.asCurrencyWith6Decimals()) )
+        let pricePerChange = coinModel.priceChangePercentage24H
+        let priceStats = StatisticModel(title: vm.translateState ? "Price" : "قیمت", value: price, percentageChange: pricePerChange)
+        
+        let marketCap =  (vm.translateState ? (coinModel.marketCap?.formattedWithAbbreviationsEng() ?? "") : (coinModel.marketCap?.formattedWithAbbreviations() ?? ""))
         let marketCapPerChange = coinModel.marketCapChangePercentage24H
-        let marketCapStat = StatisticModel(title: "حجم بازار", value: marketCap, percentageChange: marketCapPerChange)
+        let marketCapStat = StatisticModel(title: vm.translateState ? "Market Volume" : "حجم بازار", value: marketCap, percentageChange: marketCapPerChange)
         
         let rank = "\(coinModel.rank)"
-        let rankStats = StatisticModel(title: "رتبه", value: rank)
+        let rankStats = StatisticModel(title: vm.translateState ? "Rank" : "رتبه", value: rank)
     
-        let volume = coinModel.totalVolume?.formattedWithAbbreviations() ?? "-"
-        let volumeStats = StatisticModel(title: "معاملات ۲۴ ساعت", value: volume)
+        
+        let volume = (vm.translateState ?  (coinModel.totalVolume?.formattedWithAbbreviationsEng() ?? "-") : (coinModel.totalVolume?.formattedWithAbbreviations() ?? "-") )
+        let volumeStats = StatisticModel(title: vm.translateState ? "24h Trades" : "معاملات ۲۴ ساعت", value: volume)
         
         let overviewArray: [StatisticModel] = [
             priceStats, marketCapStat, rankStats, volumeStats
         ]
         
-        //24h change
-        let high = coinModel.high24H?.asCurrencyWith6Decimals() ?? "-"
-        let highStats = StatisticModel(title: "بالاترین قیمت", value: high)
+        //MARK: 24h Infos
+        let high = (vm.translateState ? (coinModel.high24H?.asCurrencyWith6DecimalsENG() ?? "-") : (coinModel.high24H?.asCurrencyWith6Decimals() ?? "-") )
+        let highStats = StatisticModel(title: vm.translateState ? "Highest Price" : "بالاترین قیمت", value: high)
         
-        let low = coinModel.low24H?.asCurrencyWith6Decimals() ?? "-"
-        let lowStats = StatisticModel(title: "پایین‌ترین قیمت", value: low)
+        let low = (vm.translateState ? (coinModel.low24H?.asCurrencyWith6DecimalsENG() ?? "-"):(coinModel.low24H?.asCurrencyWith6Decimals() ?? "-"))
         
-        let priceChange = coinModel.priceChange24H?.asCurrencyWith6Decimals() ?? "-"
+        let lowStats = StatisticModel(title: vm.translateState ? "Lowest Price" : "پایین‌ترین قیمت", value: low)
+        
+        let priceChange = (vm.translateState ? (coinModel.priceChange24H?.asCurrencyWith6DecimalsENG() ?? "-"):(coinModel.priceChange24H?.asCurrencyWith6Decimals() ?? "-"))
+        
         let pricePerChange2 = coinModel.priceChangePercentage24H
-        let priceChangeStats = StatisticModel(title: "تغییر قیمت", value: priceChange, percentageChange: pricePerChange2)
+        let priceChangeStats = StatisticModel(title: vm.translateState ? "Price Changes" : "تغییرات قیمت", value: priceChange, percentageChange: pricePerChange2)
         
-        let marketCapChange = coinModel.marketCapChange24H?.formattedWithAbbreviations() ?? "-"
+       
+        let marketCapChange = (vm.translateState ? (coinModel.marketCapChange24H?.formattedWithAbbreviationsEng() ?? "-") : (coinModel.marketCapChange24H?.formattedWithAbbreviations() ?? "-"))
         let marketCapPerChange2 = coinModel.marketCapChangePercentage24H
-        let marketCapChangeStats = StatisticModel(title: "تغییر حجم بازار", value: marketCapChange, percentageChange: marketCapPerChange2)
+        let marketCapChangeStats = StatisticModel(title: vm.translateState ? "Market Volume Changes" : "تفییرات حجم بازار", value: marketCapChange, percentageChange: marketCapPerChange2)
         
         let chnageIn24HArray: [StatisticModel] = [
             highStats, lowStats, priceChangeStats, marketCapChangeStats
             ]
         
-        //aditional
+        //MARK: Footer Infos
         let blockTime = coinDetailModel?.blockTimeInMinutes ?? 0
-        let blockTimeString = blockTime == 0 ? "-" : "\(blockTime.engToFaInt())"
-        let blockTimeStats = StatisticModel(title: "زمان ساخت بلاک", value: blockTimeString)
+        let blockTimeStats = StatisticModel(title: vm.translateState ? "‌Block Build Time" : "زمان ساخته شدن بلاک", value: vm.translateState ? blockTime.asIntToEngString() : blockTime.engToFaInt())
         
         let hashing = coinDetailModel?.hashingAlgorithm ?? "-"
-        let hashingStats = StatisticModel(title: "الگوریتم هش", value: hashing)
+        let hashingStats = StatisticModel(title: vm.translateState ? "Hash Algorithm" : "هش الگوریتم", value: hashing)
         
         let genesisDate = coinDetailModel?.genesisDate ?? "-"
-        let genesisDateStats = StatisticModel(title: "تاریخ پیدایش", value: (genesisDate.toDate()?.asShortDateString()) ?? "-" )
+        let genesisDateStats = StatisticModel(title: vm.translateState ? "Created" : "زمان پیدایش", value: vm.translateState ? (genesisDate.toDate()?.asShortDateStringENG() ?? "-") : (genesisDate.toDate()?.asShortDateString() ?? "-") )
         
         let additionalArray: [StatisticModel] = [
             blockTimeStats, hashingStats, genesisDateStats

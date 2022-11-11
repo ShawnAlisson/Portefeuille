@@ -30,6 +30,7 @@ struct ColorTheme {
     
     let accent = Color("AccentColor")
     let background = Color("BackgroundColor")
+    let secondaryBg = Color("SecondaryBackgroundColor")
     let green = Color("GreenColor")
     let red = Color("RedColor")
     let shadowColor = Color("ShadowColor")

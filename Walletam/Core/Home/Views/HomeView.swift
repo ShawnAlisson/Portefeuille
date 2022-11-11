@@ -29,109 +29,101 @@ struct HomeView: View {
     @State private var selectedCoin: CoinModel? = nil
     @FocusState private var searchIsFocused: Bool
     
-//    private let manage = PortfolioDataService.instance
-    
-    
     var body: some View {
         
         ZStack {
-//        if authManager.isAuthenticated {
-            ZStack {
-                //background layer
-                Color.theme.background
-                    .ignoresSafeArea()
-                    
-                    .sheet(isPresented: $showPortfolioView, content: {
-                        ManagePortfolioView()
-                            .environmentObject(vm)
-                            .onAppear(perform: {
-                                self.vm.dateAdded = Date.now
-                            })
-                            .onDisappear(perform: vm.portfolioDataService.getPortfolio)
-                    })
-                
-                //content layer
-                VStack {
-                    
-                    //Prices View
-                    if showPrices {
-                        allCoinsList
-                    }
-                    
-                    //Portfolio View
-                    if !showPrices {
-                        ZStack(alignment: .top) {
-                            //show startup screen if portfolio is empty
-                            if vm.portfolioDataService.savedEntities.isEmpty && vm.searchField.isEmpty && vm.portfolioDataService.irEntities.isEmpty {emptyPortfolioList } else if vm.portfolioCoins.isEmpty && vm.portfolioDataService.irEntities.isEmpty {loadingPortfolioList} else {portfolioList}
-                        }
-                    }
-                    
-                    Spacer(minLength: 0)
-                    
-                }
-                .redacted(when: vm.isLoading)
-                .opacity(animationAmount)
-                        .animation(Animation
-                                    .easeInOut(duration: 1)
-                                    .repeatForever(autoreverses: true), value: animationAmount)
-                        .onAppear { animationAmount = 0.8 }
-                
-//                        .background(NavigationLink(
-//                            destination: GoldView(),
-//                            isActive: $showGoldView,
-//                            label: { EmptyView() }))
-                    
-                //Settings View Sheet
-                .sheet(isPresented: $showSettingsView, content: {
-                    SettingsView()
-                })
-                
-                //Navigation Link for Detail View
-                .background(
-                    NavigationLink(
-                        destination: DetailLoadingView(coin: $selectedCoin),
-                        isActive: $showDetailView,
-                        label: { EmptyView() })
-                )
-                
-                //Custom Tab Bar
-                VStack{
-                    Spacer()
-                    customTabBar
-                        .padding(.bottom, 5)
-                }
+            //background layer
+            Color.theme.background
                 .ignoresSafeArea()
-                //            .unredacted()
+            
+                .sheet(isPresented: $showPortfolioView, content: {
+                    ManagePortfolioView()
+                        .environmentObject(vm)
+                        .onAppear(perform: {
+                            self.vm.dateAdded = Date.now
+                        })
+                        .onDisappear(perform: vm.portfolioDataService.getPortfolio)
+                })
+            
+            //content layer
+            VStack {
                 
-                //Navigation Link for Transaction View
-                .background(NavigationLink(
-                    destination: TransactionLoadingView(coin: $selectedCoin),
-                    isActive: $showTranView,
-                    label: { EmptyView() }))
+                //Prices View
+                if showPrices {
+                    allCoinsList
+                }
+                
+                //Portfolio View
+                if !showPrices {
+                    
+                    ZStack(alignment: .top) {
+                        
+                        //show startup screen if portfolio is empty
+                        if vm.portfolioDataService.savedEntities.isEmpty && vm.searchField.isEmpty && vm.portfolioDataService.irEntities.isEmpty {emptyPortfolioList } else if vm.portfolioCoins.isEmpty && vm.portfolioDataService.irEntities.isEmpty {loadingPortfolioList} else {portfolioList}
+                    }
+                }
+                
+                Spacer(minLength: 0)
             }
+            .redacted(when: vm.isLoading)
+            .opacity(animationAmount)
+            .animation(Animation
+                .easeInOut(duration: 1)
+                .repeatForever(autoreverses: true), value: animationAmount)
+            .onAppear { animationAmount = 0.8 }
+            
+            //MARK: FUTURE
+            //                        .background(NavigationLink(
+            //                            destination: GoldView(),
+            //                            isActive: $showGoldView,
+            //                            label: { EmptyView() }))
+            
+            //Settings View Sheet
+            .sheet(isPresented: $showSettingsView, content: {
+                SettingsView()
+            })
+            
+            //Navigation Link for Detail View
             .background(
                 NavigationLink(
-                    destination: TomanTransactionView(),
-                    isActive: $showIRTransView,
-                    label: { EmptyView() })
+                    destination: DetailLoadingView(coin: $selectedCoin),
+                    isActive: $showDetailView,
+                    label: { EmptyView() }).opacity(0)
             )
-            .toolbar(content: {
-                ToolbarItemGroup(placement: .keyboard) {
-                    Spacer()
-                    Button("بستن") {
-                        searchIsFocused = false
-                    }
-                    .font(Font.custom("BYekan", size: 18))
-                }
-            })
-//        } else {
-//            LoginView()
-//                .environmentObject(authManager)
-//
-//        }
+            
+            //Custom Tab Bar
+            VStack{
+                Spacer()
+                customTabBar
+                    .padding(.bottom, 5)
+            }
+            .ignoresSafeArea()
+            .unredacted()
+            
+            //Navigation Link for Transaction View
+            .background(
+                NavigationLink(
+                    destination: TransactionLoadingView(coin: $selectedCoin),
+                    isActive: $showTranView,
+                    label: { EmptyView() }).opacity(0))
+            
+            
         }
-        
-        
+        .background(
+            NavigationLink(
+                destination: TomanTransactionView(),
+                isActive: $showIRTransView,
+                label: { EmptyView() }).opacity(0)
+        )
+        .toolbar(content: {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("close") {
+                    searchIsFocused = false
+                }
+                .font(Font.custom("BYekan", size: 18))
+            }
+        })
     }
 }
 
@@ -147,6 +139,8 @@ struct HomeView_Previews: PreviewProvider {
         
         .preferredColorScheme(.dark)
         .environmentObject(dev.homeVM)
+        .environment(\.locale, .init(identifier: "fa"))
+        
         
     }
 }
@@ -154,7 +148,7 @@ struct HomeView_Previews: PreviewProvider {
 //MARK: EXTENSIONS
 extension HomeView {
     
-    //View: list of all coins (Prices)
+    //MARK: Prices View
     private var allCoinsList: some View {
         List {
             Section {
@@ -182,11 +176,11 @@ extension HomeView {
                         
                     }
                     .redacted(reason: .placeholder)
-                        .opacity(animationAmount)
-                                .animation(Animation
-                                            .easeInOut(duration: 1)
-                                            .repeatForever(autoreverses: true), value: animationAmount)
-                                .onAppear { animationAmount = 0.8 }
+                    .opacity(animationAmount)
+                    .animation(Animation
+                        .easeInOut(duration: 1)
+                        .repeatForever(autoreverses: true), value: animationAmount)
+                    .onAppear { animationAmount = 0.8 }
                     
                 } else {
                     ForEach(vm.allCoins) { coin in
@@ -200,10 +194,14 @@ extension HomeView {
                                 HapticManager.impact(style: .soft)
                             }
                     }
-
+                    
                 }
-                            } header: {
-                                HomeStatsView(showPrices: $showPrices)
+                //MARK: Header
+            } header: {
+                
+                
+                //MARK: Stats and Search
+                HomeStatsView(showPrices: $showPrices)
                 SearchBarView(searchField: $vm.searchField)
                     .focused($searchIsFocused)
                     .onTapGesture {
@@ -214,23 +212,24 @@ extension HomeView {
             }
         }
         .listStyle(.insetGrouped)
+#if !targetEnvironment(macCatalyst)
         .refreshable {
             vm.reloadData()
         }
+#endif
     }
     
-    //View: list of portfolio
+    //MARK: Portefeuille View
     private var portfolioList: some View {
         
         List {
-            
             Section {
                 
                 if vm.portfolioCoins.isEmpty && !vm.portfolioDataService.savedEntities.isEmpty {
                     
                     let numDum = vm.portfolioDataService.savedEntities.count
                     
-                    ForEach(0..<numDum) { index in
+                    ForEach(0..<numDum, id: \.self) { index in
                         HStack {
                             HStack{
                                 Image(systemName: "bitcoinsign.circle.fill")
@@ -251,11 +250,11 @@ extension HomeView {
                         }
                     }
                     .redacted(reason: .placeholder)
-                        .opacity(animationAmount)
-                                .animation(Animation
-                                            .easeInOut(duration: 1)
-                                            .repeatForever(autoreverses: true), value: animationAmount)
-                                .onAppear { animationAmount = 0.8 }
+                    .opacity(animationAmount)
+                    .animation(Animation
+                        .easeInOut(duration: 1)
+                        .repeatForever(autoreverses: true), value: animationAmount)
+                    .onAppear { animationAmount = 0.8 }
                     
                 } else {
                     
@@ -274,6 +273,7 @@ extension HomeView {
                     .onDelete(perform: remove)
                 }
             }
+            //MARK: Header
         header: {
             HomeStatsView(showPrices: $showPrices)
             //            SearchBarView(searchField: $vm.searchField)
@@ -281,16 +281,16 @@ extension HomeView {
         }
             Section {
                 if !vm.portfolioDataService.irEntities.isEmpty {
-                  tomanPortfolioView
+                    tomanPortfolioView
                 }
             }
             
             //Future UPDATE
-//            Section {
-//                if !vm.portfolioDataService.goldEntities.isEmpty {
-//                goldPortfolioView
-//                }
-//            }
+            //            Section {
+            //                if !vm.portfolioDataService.goldEntities.isEmpty {
+            //                goldPortfolioView
+            //                }
+            //            }
             
         footer: {
             Text("").frame(height: 50)
@@ -300,64 +300,67 @@ extension HomeView {
         .listStyle(.insetGrouped)
         .onAppear(perform: vm.portfolioDataService.applyChanges)
         .onAppear(perform: vm.irAmountCalc)
+#if !targetEnvironment(macCatalyst)
         .refreshable {
             vm.reloadData()
         }
+#endif
     }
     
-    private var goldPortfolioView: some View {
+    //MARK: FUTURE
+    //    private var goldPortfolioView: some View {
+    //        HStack{
+    //            HStack {
+    //                Image(systemName: "circlebadge.2.fill").resizable().scaledToFit().frame(width: 45, height: 45).foregroundColor(Color.yellow)
+    //
+    //                Text("سکه و طلا").font(Font.custom("BYekan+", size: 16))
+    //            }
+    //
+    //            Spacer()
+    //
+    //            HStack {
+    //                Text("helo")
+    //            }
+    //
+    //        }.background(Color.theme.background.opacity(0.001))
+    //            .onTapGesture {
+    //                segueGold()
+    //            }
+    //    }
+    
+    //MARK: Toman Section View
+    private var tomanPortfolioView: some View {
         HStack{
             HStack {
-                Image(systemName: "circlebadge.2.fill").resizable().scaledToFit().frame(width: 45, height: 45).foregroundColor(Color.yellow)
-                
-                Text("سکه و طلا").font(Font.custom("BYekan+", size: 16))
+                Image(systemName: "creditcard.circle.fill").resizable().scaledToFit().frame(width: 45, height: 45).foregroundColor(Color.theme.green)
+                Text("toman_sign").font(Font.custom("BYekan+", size: 16))
             }
             
             Spacer()
             
-            HStack {
-                Text("helo")
-            }
+            let newTethPrice = ((vm.tethPrice ?? "") as NSString).doubleValue
+            let newPrice = (vm.irPrice ?? 0) / newTethPrice
             
-        }.background(Color.theme.background.opacity(0.001))
-            .onTapGesture {
-                segueGold()
-            }
-    }
-    
-    //View: Toman Portfolio
-    private var tomanPortfolioView: some View {
-            HStack{
-                HStack {
-                    Image(systemName: "creditcard.circle.fill").resizable().scaledToFit().frame(width: 45, height: 45).foregroundColor(Color.theme.green)
-                    Text("تومان").font(Font.custom("BYekan+", size: 16))
-                }
-                
-                Spacer()
-                
-                let newTethPrice = ((vm.tethPrice ?? "") as NSString).doubleValue
-                let newPrice = (vm.irPrice ?? 0) / newTethPrice
-                
-                VStack(alignment: .trailing){
-                    Text("\(vm.irPrice?.asTomanWith2Decimals() ?? "")")
-                        .font(Font.custom("BYekan+", size: 16))
-                    if newPrice.isInfinite {
-                        HStack{
-                            Text("$۰.۰۱")
-                                .font(Font.custom("BYekan+", size: 14)).foregroundColor(Color.theme.SecondaryText)
-                        }
-                        .redacted(reason: .placeholder)
-                            .opacity(animationAmount)
-                                    .animation(Animation
-                                                .easeInOut(duration: 1)
-                                                .repeatForever(autoreverses: true), value: animationAmount)
-                                    .onAppear { animationAmount = 0.8 }
-                    } else {
-                        Text("\( (newPrice*10).asCurrencyWith2Decimals() )")
+            VStack(alignment: .trailing){
+                Text(vm.translateState ? "\(vm.irPrice?.asTomanWithTwoDecimalsEng() ?? "")" : "\(vm.irPrice?.asTomanWith2Decimals() ?? "")")
+                    .font(Font.custom("BYekan+", size: 16))
+                if newPrice.isInfinite {
+                    HStack{
+                        Text("$۰.۰۱")
                             .font(Font.custom("BYekan+", size: 14)).foregroundColor(Color.theme.SecondaryText)
                     }
+                    .redacted(reason: .placeholder)
+                    .opacity(animationAmount)
+                    .animation(Animation
+                        .easeInOut(duration: 1)
+                        .repeatForever(autoreverses: true), value: animationAmount)
+                    .onAppear { animationAmount = 0.8 }
+                } else {
+                    Text(vm.translateState ? "\( (newPrice*10).asDollarWithTwoDecimalsEng() )" : "\( (newPrice*10).asCurrencyWith2Decimals() )")
+                        .font(Font.custom("BYekan+", size: 14)).foregroundColor(Color.theme.SecondaryText)
                 }
-            }.background(Color.theme.background.opacity(0.001))
+            }
+        }.background(Color.theme.background.opacity(0.001))
             .onTapGesture {
                 segueIRTran()
             }
@@ -366,8 +369,8 @@ extension HomeView {
                 HapticManager.impact(style: .soft)
             }
     }
-        
-    //View: Empty Portfolio
+    
+    //MARK: Empty Welcome View
     private var emptyPortfolioList: some View {
         VStack {
             Spacer()
@@ -375,7 +378,7 @@ extension HomeView {
                 .resizable()
                 .scaledToFit().frame(width: 200, height: 200)
                 .foregroundColor(Color.theme.SecondaryText.opacity(0.5))
-            Text(" روی + کلیک کن و مدیریت دارایی‌هاتو شروع کن!")
+            Text("intro_text")
                 .multilineTextAlignment(.center)
                 .font(Font.custom("BYekan+", size: 22))
                 .padding()
@@ -385,35 +388,31 @@ extension HomeView {
         .unredacted()
     }
     
-    //View: Loading Portfolio List
-    
+    //MARK: Loading View
     private var loadingPortfolioList: some View {
         List {
             Section {
-                
-                
             }
-            
         header: {
             VStack{
                 ForEach(100000..<100004) { index in
-                HStack{
-                    Text("Test").foregroundColor(Color.theme.green)
-                    Spacer()
-                    Text("Test").foregroundColor(Color.theme.red)
+                    HStack{
+                        Text("Test").foregroundColor(Color.theme.green)
+                        Spacer()
+                        Text("Test").foregroundColor(Color.theme.red)
+                        
+                    }
                     
-                }
-                
                 }.padding()
             }.background(
                 .ultraThinMaterial).cornerRadius(15).frame(height: 100)
-                
+            
             columnTitle.padding()
         }.redacted(reason: .placeholder)
             
-        
             
-        Section {
+            
+            Section {
                 if !vm.portfolioDataService.irEntities.isEmpty {
                     tomanPortfolioView
                 }
@@ -423,19 +422,21 @@ extension HomeView {
         }
         }
         .listStyle(.insetGrouped)
+#if !targetEnvironment(macCatalyst)
         .refreshable {
             vm.reloadData()
         }
+#endif
     }
     
     
-    //Tab Bar
+    //MARK: Tab Bar
     private var customTabBar: some View {
         ZStack {
-//            RoundedRectangle(cornerRadius: 20).fill(Color.theme.background.opacity(0.9))
-//                .shadow(color: Color.theme.shadowColor.opacity(0.6), radius: 25, x: 0, y: 0)
-//                .frame(width: UIScreen.main.bounds.width / 1.2, height: 52, alignment: .center)
-//                .padding()
+            //            RoundedRectangle(cornerRadius: 20).fill(Color.theme.background.opacity(0.9))
+            //                .shadow(color: Color.theme.shadowColor.opacity(0.6), radius: 25, x: 0, y: 0)
+            //                .frame(width: UIScreen.main.bounds.width / 1.2, height: 52, alignment: .center)
+            //                .padding()
             
             HStack{
                 HStack {
@@ -468,17 +469,17 @@ extension HomeView {
                         }
                     Spacer()
                     
-                        Image(systemName: "plus")
-                            .resizable()
-                            .scaledToFit()
-                            .foregroundColor(showPortfolioView ? Color.theme.green : Color.theme.reverseBackgroundColor)
-                            .frame(width: 28, height: 28)
-                            .padding(.horizontal)
-                            .onTapGesture {
-                                vm.searchField = ""
-                                showPortfolioView.toggle()
-                                HapticManager.impact(style: .soft)
-                            }
+                    Image(systemName: "plus")
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(showPortfolioView ? Color.theme.green : Color.theme.reverseBackgroundColor)
+                        .frame(width: 28, height: 28)
+                        .padding(.horizontal)
+                        .onTapGesture {
+                            vm.searchField = ""
+                            showPortfolioView.toggle()
+                            HapticManager.impact(style: .soft)
+                        }
                     
                     Spacer()
                     Image(systemName: "gear")
@@ -497,14 +498,14 @@ extension HomeView {
                     
                 }
                 .padding()
-//                .frame(width: UIScreen.main.bounds.width / 1.2, height: 52, alignment: .center)
+                //                .frame(width: UIScreen.main.bounds.width / 1.2, height: 52, alignment: .center)
             }
-        }.background(.ultraThinMaterial).cornerRadius(15).shadow(color: Color.theme.shadowColor.opacity(0.6), radius: 25, x: 0, y: 0)
-//                        .frame(width: UIScreen.main.bounds.width / 1.2, height: 52, alignment: .center)
-                        .padding()
+        }.background(.ultraThinMaterial).cornerRadius(30).shadow(color: Color.theme.shadowColor.opacity(0.2), radius: 0, x: 2, y: 2)
+        //                        .frame(width: UIScreen.main.bounds.width / 1.2, height: 52, alignment: .center)
+            .padding()
     }
     
-    //Column Titles
+    //MARK: Column Titles
     private var columnTitle: some View {
         HStack {
             if showPrices{
@@ -540,7 +541,7 @@ extension HomeView {
                 Spacer()
                 
                 HStack {
-                    Text(vm.showCurrencyChange ? "به تومان" : "به دلار")
+                    Text(vm.showCurrencyChange ? "toman_sign" : "dollar")
                         .onTapGesture {
                             vm.showCurrencyChange.toggle()
                             HapticManager.impact(style: .soft)
@@ -555,7 +556,7 @@ extension HomeView {
                         .opacity((vm.sortOptions == .price || vm.sortOptions == .priceReversed) ? 1.0 : 0.0)
                         .rotationEffect(Angle(degrees: vm.sortOptions == .price ? 0 : 180))
                         .font(.caption2)
-                    Text("قیمت")
+                    Text("price")
                     
                 }
                 .onTapGesture {
@@ -597,8 +598,9 @@ extension HomeView {
                 
                 Spacer()
                 
+                
                 HStack {
-                    Text(vm.showCurrencyChange ? "به تومان" :  "به دلار")
+                    Text(vm.showCurrencyChange ? "toman_sign" :  "dollar")
                         .onTapGesture {
                             vm.showCurrencyChange.toggle()
                             HapticManager.impact(style: .soft)
@@ -609,12 +611,11 @@ extension HomeView {
                 
                 
                 HStack {
-                    
                     Image(systemName: "chevron.down")
                         .opacity((vm.sortOptions == .holding || vm.sortOptions == .holdingReversed) ? 1.0 : 0.0)
                         .rotationEffect(Angle(degrees: vm.sortOptions == .holding ? 0 : 180))
                         .font(.caption2)
-                    Text("موجودی")
+                    Text("holding")
                     
                 }
                 .onTapGesture {
@@ -633,7 +634,11 @@ extension HomeView {
     }
     
     
-    //onDelete Function
+    
+    
+    //MARK: FUNCTIONS
+    
+    //MARK: Delete Function
     func remove(at offsets: IndexSet) {
         for index in offsets {
             let coin = vm.portfolioCoins[index]
@@ -641,30 +646,28 @@ extension HomeView {
         }
     }
     
-    
-    
-    //Navigate to Detail View
+    //MARK: Navigation to Detail Function
     private func segue(coin: CoinModel) {
         selectedCoin = coin
         showDetailView.toggle()
     }
     
-    //Navigate to Transaction View
+    //MARK: Navigate to Transaction Function
     private func segueTran(coin: CoinModel) {
         selectedCoin = coin
         showTranView.toggle()
     }
     
+    //MARK: Navigate to Toman Transaction Function
     private func segueIRTran() {
         showIRTransView.toggle()
     }
     
-    private func segueGold() {
-        showGoldView.toggle()
-    }
+    //MARK: FUTURE
+    //    private func segueGold() {
+    //        showGoldView.toggle()
+    //    }
 }
-
-
 extension View {
     @ViewBuilder
     func redacted(when condition: Bool) -> some View {

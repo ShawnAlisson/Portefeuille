@@ -10,6 +10,7 @@ import SwiftUI
 struct StatisticView: View {
     
     let stat: StatisticModel
+    @ObservedObject var vm = HomeViewModel()
     
     var body: some View {
         
@@ -21,6 +22,7 @@ struct StatisticView: View {
                 .minimumScaleFactor(0.5)
                 //.font(.caption)
                 .foregroundColor(Color.theme.SecondaryText)
+                
             Text(stat.value)
                 .font(Font.custom("BYekan+", size: 14))
                 .lineLimit(1)
@@ -33,7 +35,7 @@ struct StatisticView: View {
                     .rotationEffect(
                         Angle(degrees: (stat.percentageChange ?? 0) >= 0 ? 0 : 180))
                     
-                Text(stat.percentageChange?.asPercentString() ?? "")
+                Text(vm.translateState ? (stat.percentageChange?.asPercentStringENG() ?? ""):(stat.percentageChange?.asPercentString() ?? "") )
                     .font(Font.custom("BYekan+", size: 12))
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
@@ -42,6 +44,7 @@ struct StatisticView: View {
             .foregroundColor((stat.percentageChange ?? 0) >= 0 ? Color.theme.green : Color.theme.red)
             .opacity(stat.percentageChange == nil ? 0.0 : 1.0)
         }
+        
     }
 }
 

@@ -41,7 +41,7 @@ extension CoinRowView {
     //MARK: VIEWS
     private var leftColumn: some View {
         HStack(spacing: 5) {
-            Text("\(coin.rank.engToFaInt())")
+            Text(vm.translateState ? "\(coin.rank)" : "\(coin.rank.engToFaInt())")
                 .font(Font.custom("BYekan+", size: 12))
                 .foregroundColor(Color.theme.SecondaryText)
                 .frame(minWidth: 30)
@@ -72,20 +72,20 @@ extension CoinRowView {
                     if showCurrencyChange {
                         let newTethPrice = ((vm.tethPrice ?? "") as NSString).doubleValue
                         
-                        Text("\((coin.currentPrice * newTethPrice / 10 ).asTomanWith6Decimals())")
+                        Text(vm.translateState ? "\((coin.currentPrice * newTethPrice / 10 ).asTomanWithTwoDecimalsEng())" : "\((coin.currentPrice * newTethPrice / 10 ).asTomanWith2Decimals())")
                             .modifier(PersianTwelveSolo())
                             .foregroundColor(Color.theme.SecondaryText)
-                        Text("\(coin.priceChangePercentage24H?.asPercentString() ?? "")")
+                        Text(vm.translateState ? "\(coin.priceChangePercentage24H?.asPercentStringENG() ?? "")" : "\(coin.priceChangePercentage24H?.asPercentString() ?? "")")
                             .modifier(PersianTwelveSolo())
                             .foregroundColor(
                                 (coin.priceChangePercentage24H ?? 0) >= 0 ?
                                 Color.theme.green : Color.theme.red
                             )
                     } else if !showCurrencyChange {
-                        Text("\(coin.currentPrice.asCurrencyWith6Decimals())")
+                        Text(vm.translateState ? "\(coin.currentPrice.asCurrencyWith6DecimalsENG())" : "\(coin.currentPrice.asCurrencyWith6Decimals())")
                             .modifier(PersianTwelveSolo())
                             .foregroundColor(Color.theme.SecondaryText)
-                        Text("\(coin.priceChangePercentage24H?.asPercentString() ?? "")")
+                        Text(vm.translateState ? "\(coin.priceChangePercentage24H?.asPercentStringENG() ?? "")" : "\(coin.priceChangePercentage24H?.asPercentString() ?? "")")
                             .modifier(PersianTwelveSolo())
                             .foregroundColor(
                                 (coin.priceChangePercentage24H ?? 0) >= 0 ?
@@ -102,20 +102,20 @@ extension CoinRowView {
         VStack(alignment: .trailing) {
             if showCurrencyChange {
                 let newTethPrice = ((vm.tethPrice ?? "") as NSString).doubleValue
-                Text((coin.currentHoldingsValue * newTethPrice / 10).asTomanWith6Decimals())
+                Text(vm.translateState ? (coin.currentHoldingsValue * newTethPrice / 10).asTomanWithTwoDecimalsEng() : (coin.currentHoldingsValue * newTethPrice / 10).asTomanWith2Decimals())
                 //.bold()
                     .font(Font.custom("BYekan+", size: 16))
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
-                Text((coin.currentHoldings ?? 0).asNumberString())
+                Text(vm.translateState ? (coin.currentHoldings ?? 0).asCryptoUnlimitedDecimalEng() : (coin.currentHoldings ?? 0).asCryptoUnlimitedDecimal())
                     .modifier(PersianFourteenSolo())
                     .foregroundColor(Color.theme.SecondaryText)
             } else if !showCurrencyChange {
-                Text(coin.currentHoldingsValue.asCurrencyWith2Decimals())
+                Text(vm.translateState ? coin.currentHoldingsValue.asDollarWithTwoDecimalsEng() : coin.currentHoldingsValue.asCurrencyWith6Decimals())
                     .font(Font.custom("BYekan+", size: 16))
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
-                Text((coin.currentHoldings ?? 0).asNumberString())
+                Text(vm.translateState ? (coin.currentHoldings ?? 0).asCryptoUnlimitedDecimalEng() : (coin.currentHoldings ?? 0).asCryptoUnlimitedDecimal())
                     .modifier(PersianFourteenSolo())
                     .foregroundColor(Color.theme.SecondaryText)
             }
@@ -128,11 +128,11 @@ extension CoinRowView {
             
             if showCurrencyChange {
                 let newTethPrice = ((vm.tethPrice ?? "") as NSString).doubleValue
-                Text("\((coin.currentPrice * newTethPrice / 10).asTomanWith6Decimals())")
+                Text(vm.translateState ? "\((coin.currentPrice * newTethPrice / 10).asTomanWithTwoDecimalsEng())" : "\((coin.currentPrice * newTethPrice / 10).asTomanWith6Decimals())")
                     .font(Font.custom("BYekan+", size: 16))
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
-                Text("\(coin.priceChangePercentage24H?.asPercentString() ?? "")")
+                Text(vm.translateState ? "\(coin.priceChangePercentage24H?.asPercentString() ?? "")" : "\(coin.priceChangePercentage24H?.asPercentStringENG() ?? "")")
                     .font(Font.custom("BYekan+", size: 14))
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
@@ -141,11 +141,11 @@ extension CoinRowView {
                         Color.theme.green : Color.theme.red
                     )
             } else if !showCurrencyChange {
-                Text("\(coin.currentPrice.asCurrencyWith6Decimals())")
+                Text(vm.translateState ? "\(coin.currentPrice.asDollarWithTwoDecimalsEng())" : "\(coin.currentPrice.asCurrencyWith6Decimals())")
                     .font(Font.custom("BYekan+", size: 16))
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
-                Text("\(coin.priceChangePercentage24H?.asPercentString() ?? "")")
+                Text(vm.translateState ? "\(coin.priceChangePercentage24H?.asPercentStringENG() ?? "")" : "\(coin.priceChangePercentage24H?.asPercentString() ?? "")")
                     .font(Font.custom("BYekan+", size: 14))
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)

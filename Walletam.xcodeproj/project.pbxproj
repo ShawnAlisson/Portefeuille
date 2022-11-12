@@ -74,8 +74,8 @@
 		2927B1612908A7B300C4A4A6 /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2927B1632908A83500C4A4A6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2927B1662908AAEC00C4A4A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		29E0EAAD291F08C0001F13DA /* .gitignore.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = .gitignore.md; sourceTree = "<group>"; };
 		29E0EAAE291F08FD001F13DA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		29E0EAAF291F1A2A001F13DA /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		E40AA08D27BD957B00A23C13 /* CardVerticalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardVerticalView.swift; sourceTree = "<group>"; };
 		E413C4772784E38500549A3A /* Portefeuille.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Portefeuille.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E413C47A2784E38500549A3A /* WalletamApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletamApp.swift; sourceTree = "<group>"; };
@@ -163,8 +163,8 @@
 		E413C46E2784E38500549A3A = {
 			isa = PBXGroup;
 			children = (
+				29E0EAAF291F1A2A001F13DA /* .gitignore */,
 				29E0EAAE291F08FD001F13DA /* README.md */,
-				29E0EAAD291F08C0001F13DA /* .gitignore.md */,
 				29E0EAAC291F068F001F13DA /* Future */,
 				2927B1622908A7B300C4A4A6 /* Localizable.strings */,
 				E413C4792784E38500549A3A /* Walletam */,
